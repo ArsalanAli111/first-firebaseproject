@@ -1,4 +1,5 @@
 import type { Product, Category, Order } from './types';
+import type { User as Customer } from './firestore-types';
 
 export const categories: Category[] = [
   { id: '1', name: 'Perfumes for Men', slug: 'perfumes-for-men', imageUrl: 'https://placehold.co/400x300.png', dataAiHint: 'male perfume' },
@@ -115,7 +116,11 @@ export const sampleOrders: Order[] = [
         id: 'ORD001',
         date: '2023-10-15',
         status: 'Delivered',
-        total: 160.00,
+        customer: {
+          name: 'Jane Doe',
+          email: 'jane.doe@example.com',
+        },
+        total: 150.00,
         items: [
             { id: 'p3', name: 'Velvet Rose', price: 150.00, quantity: 1, imageUrl: 'https://placehold.co/100x100.png' },
         ]
@@ -124,6 +129,10 @@ export const sampleOrders: Order[] = [
         id: 'ORD002',
         date: '2023-11-01',
         status: 'Shipped',
+        customer: {
+          name: 'John Smith',
+          email: 'john.smith@example.com',
+        },
         total: 230.00,
         items: [
             { id: 'p1', name: 'Ocean Breeze', price: 120.00, quantity: 1, imageUrl: 'https://placehold.co/100x100.png' },
@@ -134,9 +143,65 @@ export const sampleOrders: Order[] = [
         id: 'ORD003',
         date: '2023-11-05',
         status: 'Pending',
+        customer: {
+          name: 'Emily Johnson',
+          email: 'emily.j@example.com'
+        },
         total: 40.00,
         items: [
             { id: 'p5', name: 'Discovery Tester Set', price: 40.00, quantity: 1, imageUrl: 'https://placehold.co/100x100.png' },
         ]
+    },
+    {
+      id: 'ORD004',
+      date: '2023-11-06',
+      status: 'Delivered',
+      customer: {
+        name: 'Mark S. Brown',
+        email: 'mark.brown@example.com'
+      },
+      total: 180.00,
+      items: [
+        { id: 'p2', name: 'Midnight Oud', price: 180.00, quantity: 1, imageUrl: 'https://placehold.co/100x100.png' },
+      ]
+    },
+    {
+      id: 'ORD005',
+      date: '2023-11-07',
+      status: 'Shipped',
+      customer: {
+        name: 'Sophia Williams',
+        email: 'sophia.w@example.com'
+      },
+      total: 250.00,
+      items: [
+        { id: 'p6', name: 'Luxury Gift Box', price: 250.00, quantity: 1, imageUrl: 'https://placehold.co/100x100.png' },
+      ]
     }
+];
+
+export const customers: Customer[] = [
+  { id: 'user-001', name: 'Jane Doe', email: 'jane.doe@example.com', role: 'customer' },
+  { id: 'user-002', name: 'John Smith', email: 'john.smith@example.com', role: 'customer' },
+  { id: 'user-003', name: 'Emily Johnson', email: 'emily.j@example.com', role: 'customer' },
+  { id: 'user-004', name: 'Mark S. Brown', email: 'mark.brown@example.com', role: 'customer' },
+  { id: 'user-005', name: 'Sophia Williams', email: 'sophia.w@example.com', role: 'customer' },
+];
+
+export const salesData = [
+  { name: 'Jan', sales: 4000 },
+  { name: 'Feb', sales: 3000 },
+  { name: 'Mar', sales: 5000 },
+  { name: 'Apr', sales: 4500 },
+  { name: 'May', sales: 6000 },
+  { name: 'Jun', sales: 5500 },
+];
+
+export const newCustomersData = [
+    { month: 'Jan', newCustomers: 23 },
+    { month: 'Feb', newCustomers: 31 },
+    { month: 'Mar', newCustomers: 45 },
+    { month: 'Apr', newCustomers: 42 },
+    { month: 'May', newCustomers: 56 },
+    { month: 'Jun', newCustomers: 60 },
 ];

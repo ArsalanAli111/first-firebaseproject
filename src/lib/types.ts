@@ -36,5 +36,9 @@ export type Order = {
   date: string;
   status: 'Pending' | 'Shipped' | 'Delivered';
   total: number;
-  items: CartItem[];
+  customer: {
+    name: string;
+    email: string;
+  };
+  items: Omit<CartItem, 'quantity'> & { quantity: number }[];
 };

@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingBag, User, Menu } from 'lucide-react';
+import { ShoppingBag, User, Menu, LayoutDashboard } from 'lucide-react';
 import { Button } from "./ui/button";
 import { useCart } from "@/hooks/use-cart";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
@@ -20,6 +20,7 @@ export function Header() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   // This is a placeholder for auth state. In a real app, you'd use a proper auth hook.
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(true); // Placeholder for admin role
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -34,6 +35,11 @@ export function Header() {
                 {link.label}
               </Link>
             ))}
+            {isAdmin && (
+               <Link href="/admin/dashboard" className="transition-colors hover:text-accent font-semibold text-primary">
+                Dashboard
+              </Link>
+            )}
           </nav>
         </div>
 
@@ -77,6 +83,12 @@ export function Header() {
                       {link.label}
                     </Link>
                   ))}
+                   {isAdmin && (
+                    <Link href="/admin/dashboard" className="transition-colors hover:text-accent font-semibold text-primary" onClick={() => setMobileMenuOpen(false)}>
+                      <LayoutDashboard className="mr-2 inline-block h-5 w-5" />
+                      Admin
+                    </Link>
+                  )}
                 </nav>
                 <div className="mt-auto flex flex-col gap-4">
                   <Button variant="outline" asChild>
