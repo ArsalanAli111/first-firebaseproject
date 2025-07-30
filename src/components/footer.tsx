@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { Facebook, Instagram, Twitter } from 'lucide-react';
 import { Button } from './ui/button';
+import { Logo } from "./logo";
 
 const staticLinks = [
   { href: "/shipping-policy", label: "Shipping Policy" },
@@ -17,7 +18,7 @@ export function Footer() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
-            <h3 className="text-xl font-bold font-headline text-primary">Scent Sample</h3>
+            <Logo className="h-10 w-auto" />
             <p className="mt-2 text-sm text-muted-foreground">Discover your signature scent with our curated collection of luxury perfumes.</p>
           </div>
           <div className="md:col-span-1">

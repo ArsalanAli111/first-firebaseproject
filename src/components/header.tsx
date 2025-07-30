@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogClose } from "./ui/dialog";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
+import { Logo } from "./logo";
 
 const navLinks = [
   { href: "/shop", label: "Shop" },
@@ -46,7 +47,7 @@ export function Header() {
         <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-6">
             <Link href="/" className="text-2xl font-bold font-headline text-primary">
-              Scent Sample
+              <Logo className="h-10 w-auto" />
             </Link>
             <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
               {navLinks.map(link => (
@@ -130,7 +131,7 @@ export function Header() {
               <SheetContent side="left" className="w-full max-w-xs bg-background">
                 <div className="flex flex-col h-full">
                   <Link href="/" className="text-2xl font-bold font-headline text-primary mb-8" onClick={() => setMobileMenuOpen(false)}>
-                    Scent Sample
+                    <Logo className="h-10 w-auto" />
                   </Link>
                   <nav className="flex flex-col gap-4 text-lg">
                     {navLinks.map(link => (
