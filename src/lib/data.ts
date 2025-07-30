@@ -1,5 +1,5 @@
 import type { Product, Category, Order } from './types';
-import type { User as Customer, Attribute, Purchase } from './firestore-types';
+import type { User, Attribute, Purchase } from './firestore-types';
 
 export const categories: Category[] = [
   { id: '1', name: 'Perfumes for Men', slug: 'perfumes-for-men', imageUrl: 'https://placehold.co/400x300.png', dataAiHint: 'male perfume' },
@@ -192,12 +192,13 @@ export const sampleOrders: Order[] = [
     }
 ];
 
-export const customers: Customer[] = [
-  { id: 'user-001', name: 'Jane Doe', email: 'jane.doe@example.com', role: 'customer' },
-  { id: 'user-002', name: 'John Smith', email: 'john.smith@example.com', role: 'customer' },
-  { id: 'user-003', name: 'Emily Johnson', email: 'emily.j@example.com', role: 'customer' },
-  { id: 'user-004', name: 'Mark S. Brown', email: 'mark.brown@example.com', role: 'customer' },
-  { id: 'user-005', name: 'Sophia Williams', email: 'sophia.w@example.com', role: 'customer' },
+export const users: User[] = [
+  { id: 'user-001', name: 'Alice Admin', email: 'alice@example.com', role: 'admin' },
+  { id: 'user-002', name: 'Jane Doe', email: 'jane.doe@example.com', role: 'customer' },
+  { id: 'user-003', name: 'John Smith', email: 'john.smith@example.com', role: 'customer' },
+  { id: 'user-004', name: 'Emily Johnson', email: 'emily.j@example.com', role: 'customer' },
+  { id: 'user-005', name: 'Mark S. Brown', email: 'mark.brown@example.com', role: 'customer' },
+  { id: 'user-006', name: 'Sophia Williams', email: 'sophia.w@example.com', role: 'customer' },
 ];
 
 export const attributes: Attribute[] = [
