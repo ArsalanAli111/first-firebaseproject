@@ -237,13 +237,15 @@ export const newCustomersData = [
     { month: 'Jun', newCustomers: 60 },
 ];
 
-export const samplePurchases: (Omit<Purchase, 'date'> & { date: string })[] = [
+type SamplePurchase = Omit<Purchase, 'date' | 'totalCost'> & { date: string; totalCost?: number };
+
+const samplePurchaseData: SamplePurchase[] = [
     {
         id: 'pur-001',
         supplier: 'Fragrance Oils Inc.',
         productId: 'p1',
         quantity: 50,
-        cost: 2500,
+        unitCost: 50,
         date: '2023-10-01'
     },
     {
@@ -251,7 +253,7 @@ export const samplePurchases: (Omit<Purchase, 'date'> & { date: string })[] = [
         supplier: 'Aroma Chemicals LLC',
         productId: 'p2',
         quantity: 30,
-        cost: 2700,
+        unitCost: 90,
         date: '2023-10-05'
     },
     {
@@ -259,7 +261,7 @@ export const samplePurchases: (Omit<Purchase, 'date'> & { date: string })[] = [
         supplier: 'Global Perfumes Co.',
         productId: 'p3',
         quantity: 100,
-        cost: 6000,
+        unitCost: 60,
         date: '2023-10-10'
     },
      {
@@ -267,7 +269,12 @@ export const samplePurchases: (Omit<Purchase, 'date'> & { date: string })[] = [
         supplier: 'Fragrance Oils Inc.',
         productId: 'p1',
         quantity: 50,
-        cost: 2500,
+        unitCost: 50,
         date: '2023-11-01'
     },
 ];
+
+export const samplePurchases: (Omit<Purchase, 'date'> & { date: string })[] = samplePurchaseData.map(p => ({
+    ...p,
+    totalCost: p.quantity * p.unitCost
+}));

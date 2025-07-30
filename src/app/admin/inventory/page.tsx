@@ -62,14 +62,18 @@ export default function InventoryPage() {
       e.preventDefault();
       const formData = new FormData(e.currentTarget);
       const productId = formData.get('productId') as string;
+      const quantity = parseInt(formData.get('quantity') as string);
+      const unitCost = parseFloat(formData.get('unitCost') as string);
+      const totalCost = quantity * unitCost;
 
       const newPurchase: DisplayPurchase = {
           id: editingPurchase ? editingPurchase.id : `pur${purchases.length + 1}`,
           supplier: formData.get('supplier') as string,
           productId: productId,
           productName: products.find(p => p.id === productId)?.name || 'Unknown',
-          quantity: parseInt(formData.get('quantity') as string),
-          cost: parseFloat(formData.get('cost') as string),
+          quantity: quantity,
+          unitCost: unitCost,
+          totalCost: totalCost,
           date: new Date().toISOString().split('T')[0], // Use today's date
       };
 
@@ -104,6 +108,7 @@ export default function InventoryPage() {
                 <TableHead>Product</TableHead>
                 <TableHead>Supplier</TableHead>
                 <TableHead className="text-right">Quantity</TableHead>
+                <TableHead className="text-right">Unit Cost</TableHead>
                 <TableHead className="text-right">Total Cost</TableHead>
                 <TableHead>
                   <span className="sr-only">Actions</span>
@@ -117,7 +122,8 @@ export default function InventoryPage() {
                   <TableCell className="font-medium">{purchase.productName}</TableCell>
                   <TableCell>{purchase.supplier}</TableCell>
                   <TableCell className="text-right">{purchase.quantity}</TableCell>
-                  <TableCell className="text-right">${purchase.cost.toFixed(2)}</TableCell>
+                  <TableCell className="text-right">${purchase.unitCost.toFixed(2)}</TableCell>
+                  <TableCell className="text-right">${purchase.totalCost.toFixed(2)}</TableCell>
                   <TableCell>
                      <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -168,8 +174,8 @@ export default function InventoryPage() {
                             <Input id="quantity" name="quantity" type="number" defaultValue={editingPurchase?.quantity} className="col-span-3" required />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="cost" className="text-right">Total Cost</Label>
-                            <Input id="cost" name="cost" type="number" step="0.01" defaultValue={editingPurchase?.cost} className="col-span-3" required />
+                            <Label htmlFor="unitCost" className="text-right">Unit Cost</Label>
+                            <Input id="unitCost" name="unitCost" type="number" step="0.01" defaultValue={editingPurchase?.unitCost} className="col-span-3" required />
                         </div>
                     </div>
                     <DialogFooter>

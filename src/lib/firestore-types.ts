@@ -58,7 +58,8 @@ export interface Purchase {
   supplier: string;
   productId: string;
   quantity: number;
-  cost: number;
+  unitCost: number;
+  totalCost: number;
   date: Date; // Or Firestore timestamp
 }
 
