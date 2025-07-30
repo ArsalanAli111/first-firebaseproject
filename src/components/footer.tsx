@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import { Facebook, Instagram, Twitter } from 'lucide-react';
 import { Button } from './ui/button';
@@ -32,7 +33,7 @@ export function Footer() {
             <h4 className="font-semibold font-headline">Information</h4>
             <ul className="mt-4 space-y-2 text-sm">
               {staticLinks.map(link => (
-                <li key={link.href}>
+                <li key={`${link.href}-${link.label}`}>
                   <Link href={link.href} className="hover:text-accent transition-colors">
                     {link.label}
                   </Link>
