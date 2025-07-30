@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -39,9 +40,9 @@ export function Header() {
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-2">
              <Button variant="ghost" size="icon" asChild>
-                <Link href={isAuthenticated ? "/account" : "/login"}>
+                <Link href={isAuthenticated ? "/dashboard" : "/login"}>
                     <User className="h-5 w-5" />
-                    <span className="sr-only">{isAuthenticated ? 'Account' : 'Login'}</span>
+                    <span className="sr-only">{isAuthenticated ? 'Dashboard' : 'Login'}</span>
                 </Link>
              </Button>
 
@@ -79,9 +80,9 @@ export function Header() {
                 </nav>
                 <div className="mt-auto flex flex-col gap-4">
                   <Button variant="outline" asChild>
-                    <Link href={isAuthenticated ? "/account" : "/login"} onClick={() => setMobileMenuOpen(false)}>
+                    <Link href={isAuthenticated ? "/dashboard" : "/login"} onClick={() => setMobileMenuOpen(false)}>
                         <User className="mr-2 h-5 w-5" />
-                        {isAuthenticated ? 'My Account' : 'Login / Sign Up'}
+                        {isAuthenticated ? 'My Dashboard' : 'Login / Sign Up'}
                     </Link>
                  </Button>
 

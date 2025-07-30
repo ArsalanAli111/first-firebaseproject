@@ -4,24 +4,75 @@ import { sampleOrders } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { User, MapPin, Edit } from "lucide-react";
 
-export default function AccountPage() {
+export default function DashboardPage() {
   // In a real app, this would be fetched for the logged-in user.
-  const orders = sampleOrders;
-  const userName = "Jane Doe";
+  const orders = sampleOrders.slice(0, 2); // Show recent orders
+  const user = {
+    name: "Jane Doe",
+    email: "jane.doe@example.com",
+    avatarUrl: "https://placehold.co/100x100.png",
+    shippingAddress: "123 Perfume Lane, Scent City, 12345"
+  };
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <header className="mb-8">
-        <h1 className="text-4xl font-bold font-headline">My Account</h1>
-        <p className="text-muted-foreground mt-2">Welcome back, {userName}!</p>
+        <h1 className="text-4xl font-bold font-headline">Dashboard</h1>
+        <p className="text-muted-foreground mt-2">Welcome back, {user.name}!</p>
       </header>
 
-      <div className="space-y-8">
-        <div>
-            <h2 className="text-2xl font-semibold font-headline mb-4">Order History</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left Column: User Info & Address */}
+        <div className="lg:col-span-1 space-y-8">
+          <Card>
+            <CardHeader className="flex flex-row items-center gap-4">
+              <Avatar className="h-16 w-16">
+                <AvatarImage src={user.avatarUrl} alt={user.name} />
+                <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+              </Avatar>
+              <div>
+                <CardTitle className="font-headline">{user.name}</CardTitle>
+                <CardDescription>{user.email}</CardDescription>
+              </div>
+            </CardHeader>
+            <CardFooter>
+                <Button variant="outline" size="sm" className="w-full">
+                    <Edit className="mr-2 h-4 w-4" />
+                    Edit Profile
+                </Button>
+            </CardFooter>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="font-headline flex items-center gap-2">
+                <MapPin className="h-5 w-5" />
+                Shipping Address
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground">{user.shippingAddress}</p>
+            </CardContent>
+             <CardFooter>
+                <Button variant="outline" size="sm" className="w-full">
+                    <Edit className="mr-2 h-4 w-4" />
+                    Update Address
+                </Button>
+            </CardFooter>
+          </Card>
+        </div>
+
+        {/* Right Column: Order History */}
+        <div className="lg:col-span-2">
+            <h2 className="text-2xl font-semibold font-headline mb-4">Recent Orders</h2>
             {orders.length === 0 ? (
-                <p>You have not placed any orders yet.</p>
+                <Card>
+                    <CardContent className="pt-6">
+                        <p>You have not placed any orders yet.</p>
+                    </CardContent>
+                </Card>
             ) : (
                 <div className="space-y-6">
                     {orders.map(order => (
@@ -53,6 +104,9 @@ export default function AccountPage() {
                             </CardFooter>
                         </Card>
                     ))}
+                     <Button variant="link" asChild>
+                        <a href="/account">View All Orders</a>
+                    </Button>
                 </div>
             )}
         </div>
