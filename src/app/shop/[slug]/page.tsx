@@ -1,4 +1,4 @@
-import { products } from '@/lib/data';
+import { products, categories } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -7,6 +7,8 @@ import { Star, ShoppingBag, Minus, Plus } from 'lucide-react';
 import { AddToCartButton } from '@/components/add-to-cart-button';
 import { RecommendedProducts } from '@/components/recommended-products';
 import { Suspense } from 'react';
+import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
 
 export async function generateStaticParams() {
   return products.map(product => ({
@@ -20,6 +22,8 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
   if (!product) {
     notFound();
   }
+  
+  const category = categories.find(c => c.slug === product.category);
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -62,6 +66,27 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
           <p className="text-3xl font-headline text-primary">${product.price.toFixed(2)}</p>
           <p className="text-muted-foreground leading-relaxed">{product.description}</p>
           
+           <div className="space-y-4 pt-4 border-t">
+              {category && (
+                  <div className="flex items-center gap-2">
+                      <span className="font-semibold text-sm">Category:</span>
+                      <Link href={`/category/${category.slug}`} passHref>
+                          <Badge variant="outline" className="cursor-pointer hover:bg-accent hover:text-accent-foreground">{category.name}</Badge>
+                      </Link>
+                  </div>
+              )}
+              {product.attributes && Object.entries(product.attributes).length > 0 && (
+                  <div className="flex items-start gap-2">
+                      <span className="font-semibold text-sm mt-1">Attributes:</span>
+                      <div className="flex flex-wrap gap-2">
+                          {Object.entries(product.attributes).map(([key, value]) => (
+                              <Badge key={key} variant="secondary">{`${key}: ${value}`}</Badge>
+                          ))}
+                      </div>
+                  </div>
+              )}
+          </div>
+
           <AddToCartButton product={product} />
 
           <div className="border-t pt-6">
