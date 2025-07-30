@@ -46,46 +46,48 @@ export default function AdminLayout({
 
   return (
     <SidebarProvider>
-        <div className="flex min-h-[calc(100vh_-_8rem)]">
-            <Sidebar collapsible="icon" className="h-full">
-            <SidebarContent className="p-2 flex flex-col">
-                <div className="flex flex-col h-full">
-                <SidebarMenu className="flex-1 mt-4">
-                    {adminNavItems.map((item) => (
-                    <SidebarMenuItem key={item.href}>
-                        <SidebarMenuButton
-                        asChild
-                        isActive={pathname === item.href}
-                        tooltip={{
-                            children: item.label,
-                        }}
-                        >
-                        <Link href={item.href}>
-                            <item.icon />
-                            <span>{item.label}</span>
-                        </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    ))}
-                </SidebarMenu>
-                <div className="mt-auto p-2">
-                    <SidebarMenuItem>
-                        <SidebarMenuButton
-                        asChild
-                        tooltip={{
-                            children: "Back to Shop",
-                        }}
-                        >
-                        <Link href="/">
-                            <Home />
-                            <span>Back to Shop</span>
-                        </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </div>
-                </div>
-            </SidebarContent>
-            </Sidebar>
+        <div className="flex">
+            <div className="sticky top-16 h-[calc(100vh-4rem)]">
+              <Sidebar collapsible="icon">
+              <SidebarContent className="p-2 flex flex-col">
+                  <div className="flex flex-col h-full">
+                  <SidebarMenu className="flex-1 mt-4">
+                      {adminNavItems.map((item) => (
+                      <SidebarMenuItem key={item.href}>
+                          <SidebarMenuButton
+                          asChild
+                          isActive={pathname === item.href}
+                          tooltip={{
+                              children: item.label,
+                          }}
+                          >
+                          <Link href={item.href}>
+                              <item.icon />
+                              <span>{item.label}</span>
+                          </Link>
+                          </SidebarMenuButton>
+                      </SidebarMenuItem>
+                      ))}
+                  </SidebarMenu>
+                  <div className="mt-auto p-2">
+                      <SidebarMenuItem>
+                          <SidebarMenuButton
+                          asChild
+                          tooltip={{
+                              children: "Back to Shop",
+                          }}
+                          >
+                          <Link href="/">
+                              <Home />
+                              <span>Back to Shop</span>
+                          </Link>
+                          </SidebarMenuButton>
+                      </SidebarMenuItem>
+                  </div>
+                  </div>
+              </SidebarContent>
+              </Sidebar>
+            </div>
             <main className="flex-1 p-6">{children}</main>
         </div>
     </SidebarProvider>
