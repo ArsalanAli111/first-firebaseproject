@@ -136,7 +136,7 @@ export default function ProductsPage() {
                 <TableHead>Category</TableHead>
                 <TableHead className="hidden md:table-cell">Attributes</TableHead>
                 <TableHead>Price</TableHead>
-                <TableHead className="hidden md:table-cell">Stock</TableHead>
+                <TableHead className="hidden md:table-cell">Quantity</TableHead>
                 <TableHead>
                   <span className="sr-only">Actions</span>
                 </TableHead>
@@ -222,7 +222,7 @@ export default function ProductsPage() {
                             <Textarea id="attributes" name="attributes" defaultValue={JSON.stringify(editingProduct?.attributes || {})} className="col-span-3" placeholder='e.g. {"size": "50ml"}' />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="stock" className="text-right">Stock</Label>
+                            <Label htmlFor="stock" className="text-right">Quantity</Label>
                             <Input id="stock" name="stock" type="number" defaultValue={editingProduct?.stock} className="col-span-3" required />
                         </div>
                          {/* We will add image upload in a future step */}
