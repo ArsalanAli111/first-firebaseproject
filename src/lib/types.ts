@@ -22,6 +22,7 @@ export type Category = {
   slug: string;
   imageUrl: string;
   dataAiHint: string;
+  parentId?: string;
 };
 
 export type CartItem = {

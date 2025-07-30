@@ -39,18 +39,19 @@ import { Label } from "@/components/ui/label"
 import { MoreHorizontal, PlusCircle } from 'lucide-react';
 import { categories as initialCategories } from '@/lib/data';
 import type { Category } from '@/lib/types';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export default function CategoriesPage() {
-  const [categories, setCategories] = React.useState<Omit<Category, 'dataAiHint'>[]>(initialCategories);
+  const [categories, setCategories] = React.useState<Category[]>(initialCategories);
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-  const [editingCategory, setEditingCategory] = React.useState<Omit<Category, 'dataAiHint'> | null>(null);
+  const [editingCategory, setEditingCategory] = React.useState<Category | null>(null);
 
   const handleAddCategory = () => {
     setEditingCategory(null);
     setIsDialogOpen(true);
   };
 
-  const handleEditCategory = (category: Omit<Category, 'dataAiHint'>) => {
+  const handleEditCategory = (category: Category) => {
     setEditingCategory(category);
     setIsDialogOpen(true);
   };
@@ -64,12 +65,15 @@ export default function CategoriesPage() {
       const formData = new FormData(e.currentTarget);
       const name = formData.get('name') as string;
       const slug = formData.get('slug') as string || name.toLowerCase().replace(/\s+/g, '-');
+      const parentId = formData.get('parentId') as string;
       
-      const newCategory: Omit<Category, 'dataAiHint'> = {
+      const newCategory: Category = {
           id: editingCategory ? editingCategory.id : `cat${categories.length + 1}`,
           name,
           slug,
           imageUrl: editingCategory?.imageUrl || 'https://placehold.co/400x300.png',
+          dataAiHint: editingCategory?.dataAiHint || 'perfume',
+          parentId: parentId || undefined
       };
 
       if (editingCategory) {
@@ -80,13 +84,20 @@ export default function CategoriesPage() {
       setIsDialogOpen(false);
   }
 
+  const getParentCategoryName = (parentId?: string) => {
+    if (!parentId) return '-';
+    return categories.find(c => c.id === parentId)?.name || 'Unknown';
+  };
+
+  const parentCategories = categories.filter(c => !c.parentId);
+
   return (
     <>
       <div className="flex items-center justify-between">
         <div>
           <CardTitle>Categories</CardTitle>
           <CardDescription>
-            Manage your product categories.
+            Manage your product categories and sub-categories.
           </CardDescription>
         </div>
         <div className="flex items-center gap-2">
@@ -102,6 +113,7 @@ export default function CategoriesPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Name</TableHead>
+                <TableHead>Parent Category</TableHead>
                 <TableHead>Slug</TableHead>
                 <TableHead>
                   <span className="sr-only">Actions</span>
@@ -112,6 +124,7 @@ export default function CategoriesPage() {
               {categories.map(category => (
                 <TableRow key={category.id}>
                   <TableCell className="font-medium">{category.name}</TableCell>
+                  <TableCell>{getParentCategoryName(category.parentId)}</TableCell>
                   <TableCell>{category.slug}</TableCell>
                   <TableCell>
                     <DropdownMenu>
@@ -156,6 +169,20 @@ export default function CategoriesPage() {
                          <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="slug" className="text-right">Slug</Label>
                             <Input id="slug" name="slug" defaultValue={editingCategory?.slug} className="col-span-3" placeholder="auto-generated-from-name" />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="parentId" className="text-right">Parent</Label>
+                             <Select name="parentId" defaultValue={editingCategory?.parentId}>
+                                <SelectTrigger className="col-span-3">
+                                    <SelectValue placeholder="Select a parent category" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="">None (Top-level)</SelectItem>
+                                    {parentCategories.map(cat => (
+                                        <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </div>
                     </div>
                     <DialogFooter>
