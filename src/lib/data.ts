@@ -1,5 +1,5 @@
 import type { Product, Category, Order } from './types';
-import type { User as Customer } from './firestore-types';
+import type { User as Customer, Attribute } from './firestore-types';
 
 export const categories: Category[] = [
   { id: '1', name: 'Perfumes for Men', slug: 'perfumes-for-men', imageUrl: 'https://placehold.co/400x300.png', dataAiHint: 'male perfume' },
@@ -187,6 +187,25 @@ export const customers: Customer[] = [
   { id: 'user-004', name: 'Mark S. Brown', email: 'mark.brown@example.com', role: 'customer' },
   { id: 'user-005', name: 'Sophia Williams', email: 'sophia.w@example.com', role: 'customer' },
 ];
+
+export const attributes: Attribute[] = [
+  {
+    id: 'attr1',
+    type: 'Scent Profile',
+    values: ['Aquatic', 'Smoky', 'Floral', 'Citrus', 'Spicy', 'Musk'],
+  },
+  {
+    id: 'attr2',
+    type: 'Size',
+    values: ['30ml', '50ml', '100ml'],
+  },
+  {
+    id: 'attr3',
+    type: 'Concentration',
+    values: ['Eau de Parfum', 'Eau de Toilette', 'Extrait de Parfum'],
+  },
+];
+
 
 export const salesData = [
   { name: 'Jan', sales: 4000 },
