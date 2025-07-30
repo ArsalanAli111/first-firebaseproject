@@ -47,7 +47,7 @@ export default function AdminLayout({
   return (
     <SidebarProvider>
         <div className="flex">
-            <div className="h-[calc(100vh-4rem)] sticky top-16">
+            <aside className="sticky top-16 h-[calc(100vh-4rem)]">
               <Sidebar collapsible="icon">
               <SidebarContent className="p-2 flex flex-col">
                   <div className="flex flex-col h-full">
@@ -87,7 +87,7 @@ export default function AdminLayout({
                   </div>
               </SidebarContent>
               </Sidebar>
-            </div>
+            </aside>
             <main className="flex-1 p-6">{children}</main>
         </div>
     </SidebarProvider>
