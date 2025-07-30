@@ -1,5 +1,5 @@
 import type { Product, Category, Order } from './types';
-import type { User as Customer, Attribute, Purchase, User } from './firestore-types';
+import type { User as Customer, Attribute, Purchase } from './firestore-types';
 
 export const categories: Category[] = [
   { id: '1', name: 'Perfumes for Men', slug: 'perfumes-for-men', imageUrl: 'https://placehold.co/400x300.png', dataAiHint: 'male perfume' },
@@ -195,11 +195,6 @@ export const customers: Customer[] = [
   { id: 'user-004', name: 'Mark S. Brown', email: 'mark.brown@example.com', role: 'customer' },
   { id: 'user-005', name: 'Sophia Williams', email: 'sophia.w@example.com', role: 'customer' },
 ];
-
-export const adminUsers: User[] = [
-  { id: 'admin-001', name: 'Admin User', email: 'admin@scentsample.com', role: 'admin' },
-  { id: 'admin-002', name: 'Super Admin', email: 'super@scentsample.com', role: 'admin' },
-]
 
 export const attributes: Attribute[] = [
   {

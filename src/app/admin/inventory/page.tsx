@@ -37,36 +37,21 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { samplePurchases, products, categories } from '@/lib/data';
+import { samplePurchases, products } from '@/lib/data';
 import type { Purchase } from '@/lib/firestore-types';
-import { Badge } from '@/components/ui/badge';
 
-type DisplayPurchase = Omit<Purchase, 'date'> & { 
-  date: string; 
-  productName: string;
-  category: string;
-  attributes?: Record<string, string | number>;
-};
+type DisplayPurchase = Omit<Purchase, 'date'> & { date: string; productName: string };
 
 
 export default function InventoryPage() {
   const [purchases, setPurchases] = React.useState<DisplayPurchase[]>(
-    samplePurchases.map(p => {
-      const product = products.find(prod => prod.id === p.productId);
-      return {
+    samplePurchases.map(p => ({
         ...p,
-        productName: product?.name || 'Unknown Product',
-        category: product?.category || 'N/A',
-        attributes: product?.attributes
-      }
-    })
+        productName: products.find(prod => prod.id === p.productId)?.name || 'Unknown Product'
+    }))
   );
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const [editingPurchase, setEditingPurchase] = React.useState<DisplayPurchase | null>(null);
-
-  const getCategoryName = (slug: string) => {
-    return categories.find(c => c.slug === slug)?.name || 'N/A';
-  }
 
   const handleAddPurchase = () => {
     setEditingPurchase(null);
@@ -77,15 +62,12 @@ export default function InventoryPage() {
       e.preventDefault();
       const formData = new FormData(e.currentTarget);
       const productId = formData.get('productId') as string;
-      const product = products.find(p => p.id === productId);
 
       const newPurchase: DisplayPurchase = {
           id: editingPurchase ? editingPurchase.id : `pur${purchases.length + 1}`,
           supplier: formData.get('supplier') as string,
           productId: productId,
-          productName: product?.name || 'Unknown',
-          category: product?.category || 'N/A',
-          attributes: product?.attributes,
+          productName: products.find(p => p.id === productId)?.name || 'Unknown',
           quantity: parseInt(formData.get('quantity') as string),
           cost: parseFloat(formData.get('cost') as string),
           date: new Date().toISOString().split('T')[0], // Use today's date
@@ -120,8 +102,6 @@ export default function InventoryPage() {
               <TableRow>
                 <TableHead>Date</TableHead>
                 <TableHead>Product</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Attributes</TableHead>
                 <TableHead>Supplier</TableHead>
                 <TableHead className="text-right">Quantity</TableHead>
                 <TableHead className="text-right">Total Cost</TableHead>
@@ -135,14 +115,6 @@ export default function InventoryPage() {
                 <TableRow key={purchase.id}>
                   <TableCell>{purchase.date}</TableCell>
                   <TableCell className="font-medium">{purchase.productName}</TableCell>
-                  <TableCell>{getCategoryName(purchase.category)}</TableCell>
-                  <TableCell>
-                     <div className="flex flex-wrap gap-1">
-                        {purchase.attributes && Object.entries(purchase.attributes).map(([key, value]) => (
-                            <Badge key={key} variant="secondary">{`${key}: ${value}`}</Badge>
-                        ))}
-                    </div>
-                  </TableCell>
                   <TableCell>{purchase.supplier}</TableCell>
                   <TableCell className="text-right">{purchase.quantity}</TableCell>
                   <TableCell className="text-right">${purchase.cost.toFixed(2)}</TableCell>
