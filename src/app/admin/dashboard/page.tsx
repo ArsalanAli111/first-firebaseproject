@@ -2,9 +2,9 @@
 'use client'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, LineChart, PieChart } from "lucide-react";
+import { BarChart as BarChartIcon, LineChart as LineChartIcon, PieChart as PieChartIcon, Users } from "lucide-react";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { Bar, Line, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Pie, Cell } from "recharts";
+import { Bar, BarChart, Line, LineChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Pie, Cell, PieChart } from "recharts";
 import { salesData, newCustomersData, sampleOrders, products } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -36,7 +36,7 @@ export default function AdminDashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-            <BarChart className="h-4 w-4 text-muted-foreground" />
+            <BarChartIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">${totalSales.toLocaleString()}</div>
@@ -46,7 +46,7 @@ export default function AdminDashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
-            <LineChart className="h-4 w-4 text-muted-foreground" />
+            <LineChartIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">+{totalOrders}</div>
@@ -56,7 +56,7 @@ export default function AdminDashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Products</CardTitle>
-            <PieChart className="h-4 w-4 text-muted-foreground" />
+            <PieChartIcon className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalProducts}</div>
@@ -161,5 +161,3 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
-
-import { Users } from "lucide-react";
