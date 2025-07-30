@@ -2,12 +2,15 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingBag, User, Menu, LayoutDashboard } from 'lucide-react';
+import { ShoppingBag, User, Menu, LayoutDashboard, Settings, LogOut } from 'lucide-react';
 import { Button } from "./ui/button";
 import { useCart } from "@/hooks/use-cart";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { useRouter } from "next/navigation";
 
 const navLinks = [
   { href: "/shop", label: "Shop" },
@@ -18,8 +21,14 @@ const navLinks = [
 
 export function Header() {
   const { cartCount } = useCart();
-  const { user, isAuthenticated, isAdmin } = useAuth();
+  const { user, isAuthenticated, isAdmin, logout } = useAuth();
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout();
+    router.push('/');
+  }
   
   return (
     <header className="fixed top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -44,12 +53,48 @@ export function Header() {
 
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-2">
-             <Button variant="ghost" size="icon" asChild>
-                <Link href={isAuthenticated ? "/dashboard" : "/login"}>
-                    <User className="h-5 w-5" />
-                    <span className="sr-only">{isAuthenticated ? 'Dashboard' : 'Login'}</span>
-                </Link>
-             </Button>
+            {isAuthenticated ? (
+               <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                     <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src="https://placehold.co/100x100.png" alt={user?.name || ''} />
+                          <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                      </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56" align="end" forceMount>
+                     <DropdownMenuLabel className="font-normal">
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">{user?.name}</p>
+                        <p className="text-xs leading-none text-muted-foreground">
+                          {user?.email}
+                        </p>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                       <Link href="/dashboard"><LayoutDashboard className="mr-2 h-4 w-4" />Dashboard</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem disabled>
+                      <Settings className="mr-2 h-4 w-4" />
+                      Settings
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                     <DropdownMenuItem onClick={handleLogout}>
+                       <LogOut className="mr-2 h-4 w-4" />
+                       Sign Out
+                     </DropdownMenuItem>
+                  </DropdownMenuContent>
+               </DropdownMenu>
+            ) : (
+               <Button variant="ghost" size="icon" asChild>
+                  <Link href="/login">
+                      <User className="h-5 w-5" />
+                      <span className="sr-only">Login</span>
+                  </Link>
+               </Button>
+            )}
 
             <Button variant="ghost" size="icon" asChild>
               <Link href="/cart" className="relative">
