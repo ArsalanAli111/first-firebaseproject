@@ -4,6 +4,7 @@ import { sampleOrders } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function AccountPage() {
   // In a real app, this would be fetched for the logged-in user.
@@ -51,7 +52,9 @@ export default function AccountPage() {
                             </CardContent>
                              <CardFooter className="flex justify-between items-center bg-secondary/50 py-3 px-6">
                                 <span className="font-semibold">Total: ${order.total.toFixed(2)}</span>
-                                <Button variant="outline" size="sm">View Details</Button>
+                                <Button variant="outline" size="sm" asChild>
+                                  <Link href={`/shop/${order.items[0]?.id || ''}`}>View Product</Link>
+                                </Button>
                             </CardFooter>
                         </Card>
                     ))}
