@@ -8,6 +8,7 @@ export type Product = {
   category: string;
   slug: string;
   stock: number;
+  brand: string;
   attributes: Record<string, string | number>;
   reviews: {
     rating: number;
