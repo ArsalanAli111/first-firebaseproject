@@ -1,6 +1,7 @@
 
 'use client';
 
+import * as React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -8,16 +9,26 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { LineChart, Line, BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from "recharts";
 import { salesData, newCustomersData, products } from "@/lib/data";
 import { FileDown } from "lucide-react";
+import type { Product } from '@/lib/types';
 
-// Calculate top selling products from sample data
-const topSellingProducts = products.slice(0, 5).map(p => ({
-  ...p,
-  unitsSold: Math.floor(Math.random() * 100) + 20,
-  revenue: p.price * (Math.floor(Math.random() * 100) + 20)
-})).sort((a,b) => b.revenue - a.revenue);
-
+type TopSellingProduct = Product & {
+    unitsSold: number;
+    revenue: number;
+};
 
 export default function ReportsPage() {
+  const [topSellingProducts, setTopSellingProducts] = React.useState<TopSellingProduct[]>([]);
+
+  React.useEffect(() => {
+    // Calculate top selling products from sample data on the client side
+    const generatedProducts = products.slice(0, 5).map(p => ({
+      ...p,
+      unitsSold: Math.floor(Math.random() * 100) + 20,
+      revenue: p.price * (Math.floor(Math.random() * 100) + 20)
+    })).sort((a,b) => b.revenue - a.revenue);
+    setTopSellingProducts(generatedProducts);
+  }, []);
+
   return (
     <div className="space-y-6">
       <Card>
