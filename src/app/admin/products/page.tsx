@@ -66,6 +66,18 @@ export default function ProductsPage() {
   const handleSaveProduct = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const formData = new FormData(e.currentTarget);
+      const attributesString = formData.get('attributes') as string;
+      let attributes = {};
+      try {
+        if (attributesString) {
+            attributes = JSON.parse(attributesString);
+        }
+      } catch (error) {
+          console.error("Invalid JSON for attributes", error);
+          // handle error, maybe show a toast to the user
+      }
+
+
       const newProduct: Product = {
           id: editingProduct ? editingProduct.id : `p${products.length + 1}`,
           name: formData.get('name') as string,
@@ -77,7 +89,7 @@ export default function ProductsPage() {
           images: editingProduct?.images || ['https://placehold.co/600x600.png'],
           slug: (formData.get('name') as string).toLowerCase().replace(/\s+/g, '-'),
           reviews: editingProduct?.reviews || [],
-          attributes: editingProduct?.attributes || {}, // Default to empty object
+          attributes: attributes,
       };
 
       if (editingProduct) {
@@ -146,7 +158,7 @@ export default function ProductsPage() {
                    <TableCell>{getCategoryName(product.category)}</TableCell>
                    <TableCell className="hidden md:table-cell">
                         <div className="flex flex-wrap gap-1">
-                            {Object.entries(product.attributes).map(([key, value]) => (
+                            {product.attributes && Object.entries(product.attributes).map(([key, value]) => (
                                 <Badge key={key} variant="secondary">{`${key}: ${value}`}</Badge>
                             ))}
                         </div>
