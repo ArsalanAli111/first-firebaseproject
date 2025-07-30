@@ -4,13 +4,10 @@
 import {
   SidebarProvider,
   Sidebar,
-  SidebarHeader,
   SidebarContent,
-  SidebarTrigger,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarInset,
 } from '@/components/ui/sidebar';
 import {
   LayoutDashboard,
@@ -20,24 +17,12 @@ import {
   Box,
   Tags,
   Warehouse,
-  FileText,
   UserCog,
   FileBarChart,
   Home,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-
 
 const adminNavItems = [
   { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -61,80 +46,48 @@ export default function AdminLayout({
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen bg-muted/40">
-        <Sidebar collapsible="icon">
-          <SidebarContent className="p-2">
-            <div className="flex flex-col h-full">
-              <SidebarHeader>
-                <div className="flex items-center justify-between group-data-[collapsible=icon]:justify-center">
-                   <h2 className="text-xl font-bold text-primary group-data-[collapsible=icon]:hidden">Admin</h2>
-                   <SidebarTrigger />
+        <div className="flex flex-1">
+            <Sidebar collapsible="icon" className="h-full">
+            <SidebarContent className="p-2 flex flex-col">
+                <div className="flex flex-col h-full">
+                <SidebarMenu className="flex-1 mt-4">
+                    {adminNavItems.map((item) => (
+                    <SidebarMenuItem key={item.href}>
+                        <SidebarMenuButton
+                        asChild
+                        isActive={pathname === item.href}
+                        tooltip={{
+                            children: item.label,
+                        }}
+                        >
+                        <Link href={item.href}>
+                            <item.icon />
+                            <span>{item.label}</span>
+                        </Link>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    ))}
+                </SidebarMenu>
+                <div className="mt-auto p-2">
+                    <SidebarMenuItem>
+                        <SidebarMenuButton
+                        asChild
+                        tooltip={{
+                            children: "Back to Shop",
+                        }}
+                        >
+                        <Link href="/">
+                            <Home />
+                            <span>Back to Shop</span>
+                        </Link>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
                 </div>
-              </SidebarHeader>
-              <SidebarMenu className="flex-1 mt-4">
-                {adminNavItems.map((item) => (
-                  <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={pathname === item.href}
-                      tooltip={{
-                        children: item.label,
-                      }}
-                    >
-                      <Link href={item.href}>
-                        <item.icon />
-                        <span>{item.label}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-              <div className="mt-auto p-2">
-                 <SidebarMenuItem>
-                    <SidebarMenuButton
-                      asChild
-                      tooltip={{
-                        children: "Back to Shop",
-                      }}
-                    >
-                      <Link href="/">
-                        <Home />
-                        <span>Back to Shop</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-              </div>
-            </div>
-          </SidebarContent>
-        </Sidebar>
-
-        <SidebarInset className="flex-1 flex flex-col">
-            <header className="flex h-14 items-center gap-4 border-b bg-background px-6">
-                <div className="flex-1">
-                    {/* Optionally add a search bar or page title here */}
                 </div>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" className="rounded-full w-8 h-8">
-                            <Avatar>
-                                <AvatarImage src="https://placehold.co/100x100.png" alt="@admin" />
-                                <AvatarFallback>A</AvatarFallback>
-                            </Avatar>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>Settings</DropdownMenuItem>
-                        <DropdownMenuItem>Support</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>Logout</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </header>
+            </SidebarContent>
+            </Sidebar>
             <main className="flex-1 p-6">{children}</main>
-        </SidebarInset>
-      </div>
+        </div>
     </SidebarProvider>
   );
 }
