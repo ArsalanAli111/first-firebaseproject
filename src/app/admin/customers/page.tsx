@@ -63,7 +63,7 @@ export default function CustomersPage() {
           id: editingUser!.id,
           name: formData.get('name') as string,
           email: formData.get('email') as string,
-          role: formData.get('role') as User['role'],
+          role: 'customer',
           password: formData.get('password') as string,
           phone: formData.get('phone') as string,
           address: formData.get('address') as string,
@@ -194,19 +194,6 @@ export default function CustomersPage() {
                          <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="country" className="text-right">Country</Label>
                             <Input id="country" name="country" defaultValue={editingUser?.country} className="col-span-3" />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="role" className="text-right">Role</Label>
-                             <Select name="role" defaultValue={editingUser?.role || 'customer'}>
-                                <SelectTrigger className="col-span-3">
-                                    <SelectValue placeholder="Select a role" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="customer">Customer</SelectItem>
-                                    <SelectItem value="staff">Staff</SelectItem>
-                                    <SelectItem value="admin">Admin</SelectItem>
-                                </SelectContent>
-                            </Select>
                         </div>
                     </div>
                     <DialogFooter>
