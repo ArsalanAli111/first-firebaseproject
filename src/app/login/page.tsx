@@ -21,7 +21,7 @@ export default function LoginPage() {
 
   React.useEffect(() => {
     if (isAuthenticated) {
-      router.push('/dashboard');
+      router.push('/profile');
     }
   }, [isAuthenticated, router]);
 
@@ -29,7 +29,7 @@ export default function LoginPage() {
     const user = users.find(u => u.email === email && u.password === password);
     if (user) {
       login({ name: user.name, email: user.email, role: user.role });
-      router.push('/dashboard');
+      router.push('/profile');
     } else {
       setError('Invalid email or password.');
     }

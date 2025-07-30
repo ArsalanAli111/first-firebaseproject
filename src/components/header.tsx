@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingBag, User, Menu, LayoutDashboard, Settings, LogOut } from 'lucide-react';
+import { ShoppingBag, User, Menu, LayoutDashboard, Settings, LogOut, UserCircle } from 'lucide-react';
 import { Button } from "./ui/button";
 import { useCart } from "@/hooks/use-cart";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
@@ -74,7 +74,7 @@ export function Header() {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                       <Link href="/dashboard"><LayoutDashboard className="mr-2 h-4 w-4" />Dashboard</Link>
+                       <Link href="/profile"><UserCircle className="mr-2 h-4 w-4" />Profile</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem disabled>
                       <Settings className="mr-2 h-4 w-4" />
@@ -136,9 +136,9 @@ export function Header() {
                 </nav>
                 <div className="mt-auto flex flex-col gap-4">
                   <Button variant="outline" asChild>
-                    <Link href={isAuthenticated ? "/dashboard" : "/login"} onClick={() => setMobileMenuOpen(false)}>
+                    <Link href={isAuthenticated ? "/profile" : "/login"} onClick={() => setMobileMenuOpen(false)}>
                         <User className="mr-2 h-5 w-5" />
-                        {isAuthenticated ? 'My Dashboard' : 'Login / Sign Up'}
+                        {isAuthenticated ? 'My Profile' : 'Login / Sign Up'}
                     </Link>
                  </Button>
 
