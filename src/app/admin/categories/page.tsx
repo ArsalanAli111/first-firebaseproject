@@ -174,10 +174,9 @@ export default function CategoriesPage() {
                             <Label htmlFor="parentId" className="text-right">Parent</Label>
                              <Select name="parentId" defaultValue={editingCategory?.parentId}>
                                 <SelectTrigger className="col-span-3">
-                                    <SelectValue placeholder="Select a parent category" />
+                                    <SelectValue placeholder="None (Top-level)" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="">None (Top-level)</SelectItem>
                                     {parentCategories.map(cat => (
                                         <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
                                     ))}
