@@ -1,5 +1,5 @@
 import type { Product, Category, Order } from './types';
-import type { User as Customer, Attribute } from './firestore-types';
+import type { User as Customer, Attribute, Purchase } from './firestore-types';
 
 export const categories: Category[] = [
   { id: '1', name: 'Perfumes for Men', slug: 'perfumes-for-men', imageUrl: 'https://placehold.co/400x300.png', dataAiHint: 'male perfume' },
@@ -223,4 +223,39 @@ export const newCustomersData = [
     { month: 'Apr', newCustomers: 42 },
     { month: 'May', newCustomers: 56 },
     { month: 'Jun', newCustomers: 60 },
+];
+
+export const samplePurchases: (Omit<Purchase, 'date'> & { date: string })[] = [
+    {
+        id: 'pur-001',
+        supplier: 'Fragrance Oils Inc.',
+        productId: 'p1',
+        quantity: 50,
+        cost: 2500,
+        date: '2023-10-01'
+    },
+    {
+        id: 'pur-002',
+        supplier: 'Aroma Chemicals LLC',
+        productId: 'p2',
+        quantity: 30,
+        cost: 2700,
+        date: '2023-10-05'
+    },
+    {
+        id: 'pur-003',
+        supplier: 'Global Perfumes Co.',
+        productId: 'p3',
+        quantity: 100,
+        cost: 6000,
+        date: '2023-10-10'
+    },
+     {
+        id: 'pur-004',
+        supplier: 'Fragrance Oils Inc.',
+        productId: 'p1',
+        quantity: 50,
+        cost: 2500,
+        date: '2023-11-01'
+    },
 ];
