@@ -6,6 +6,7 @@ import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { CartProvider } from '@/hooks/use-cart.tsx';
 import { Toaster } from '@/components/ui/toaster';
+import { AuthProvider } from '@/hooks/use-auth';
 
 export const metadata: Metadata = {
   title: 'Scent Sample',
@@ -29,12 +30,14 @@ export default function RootLayout({
           'min-h-screen bg-background font-body antialiased flex flex-col',
         )}
       >
-        <CartProvider>
-          <Header />
-          <main className="flex-grow pt-16">{children}</main>
-          <Footer />
-          <Toaster />
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <Header />
+            <main className="flex-grow pt-16">{children}</main>
+            <Footer />
+            <Toaster />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

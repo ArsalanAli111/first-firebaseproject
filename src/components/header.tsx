@@ -7,6 +7,7 @@ import { Button } from "./ui/button";
 import { useCart } from "@/hooks/use-cart";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
 
 const navLinks = [
   { href: "/shop", label: "Shop" },
@@ -17,11 +18,9 @@ const navLinks = [
 
 export function Header() {
   const { cartCount } = useCart();
+  const { user, isAuthenticated, isAdmin } = useAuth();
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-  // This is a placeholder for auth state. In a real app, you'd use a proper auth hook.
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false); // Placeholder for admin role
-
+  
   return (
     <header className="fixed top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
