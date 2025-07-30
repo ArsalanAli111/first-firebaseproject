@@ -36,16 +36,18 @@ export default function AccountPage() {
                                 </Badge>
                             </CardHeader>
                             <CardContent>
-                                {order.items.map(item => (
-                                    <div key={item.id} className="flex items-center gap-4 py-2 border-b last:border-0">
-                                        <Image src={item.imageUrl} alt={item.name} width={64} height={64} className="rounded-md" />
-                                        <div className="flex-grow">
-                                            <p className="font-medium">{item.name}</p>
-                                            <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
+                                <div className="space-y-4">
+                                    {order.items.map(item => (
+                                        <div key={item.id} className="flex items-center gap-4 py-2 border-b last:border-0">
+                                            <Image src={item.imageUrl} alt={item.name} width={64} height={64} className="rounded-md" />
+                                            <div className="flex-grow">
+                                                <p className="font-medium">{item.name}</p>
+                                                <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
+                                            </div>
+                                            <p className="font-medium">${(item.price * item.quantity).toFixed(2)}</p>
                                         </div>
-                                        <p className="font-medium">${(item.price * item.quantity).toFixed(2)}</p>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </CardContent>
                              <CardFooter className="flex justify-between items-center bg-secondary/50 py-3 px-6">
                                 <span className="font-semibold">Total: ${order.total.toFixed(2)}</span>
