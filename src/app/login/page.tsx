@@ -13,11 +13,17 @@ import * as React from "react";
 import { users } from "@/lib/data";
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const router = useRouter();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [error, setError] = React.useState('');
+
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/dashboard');
+    }
+  }, [isAuthenticated, router]);
 
   const handleLogin = () => {
     const user = users.find(u => u.email === email && u.password === password);
@@ -29,6 +35,9 @@ export default function LoginPage() {
     }
   };
 
+  if (isAuthenticated) {
+    return null; // Or a loading spinner
+  }
 
   return (
     <div className="flex items-center justify-center min-h-[80vh] bg-background">
