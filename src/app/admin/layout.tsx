@@ -45,7 +45,7 @@ export default function AdminLayout({
   const pathname = usePathname();
 
   return (
-    <div className="flex h-[calc(100vh-4rem)]">
+    <div className="flex h-[calc(100vh_-_4rem)]">
         <SidebarProvider>
             <aside className="sticky top-16 h-full">
               <Sidebar collapsible="icon">
