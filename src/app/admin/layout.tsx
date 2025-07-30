@@ -38,23 +38,21 @@ export default function AdminLayout({
 
   return (
     <div className="container mx-auto flex-1">
-        <div className="flex">
+        <div className="flex min-h-[calc(100vh-4rem)]">
             <aside className="w-64 shrink-0 border-r bg-background hidden md:block">
-                <div className="sticky top-16 h-[calc(100vh-4rem)] flex flex-col">
-                    <div className="flex-grow overflow-y-auto">
-                        <nav className="flex flex-col gap-2 p-4">
-                            {adminNavItems.map((item) => (
-                                <Link
-                                    key={item.href}
-                                    href={item.href}
-                                    className={`flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${pathname === item.href ? 'bg-muted text-primary' : ''}`}
-                                >
-                                    <item.icon className="h-4 w-4" />
-                                    {item.label}
-                                </Link>
-                            ))}
-                        </nav>
-                    </div>
+                <div className="sticky top-16 flex flex-col h-full">
+                    <nav className="flex flex-col gap-2 p-4 flex-grow">
+                        {adminNavItems.map((item) => (
+                            <Link
+                                key={item.href}
+                                href={item.href}
+                                className={`flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${pathname === item.href ? 'bg-muted text-primary' : ''}`}
+                            >
+                                <item.icon className="h-4 w-4" />
+                                {item.label}
+                            </Link>
+                        ))}
+                    </nav>
                     <div className="mt-auto p-4 border-t">
                         <Link href="/" className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary">
                             <Home className="h-4 w-4" />
@@ -63,7 +61,7 @@ export default function AdminLayout({
                     </div>
                 </div>
             </aside>
-            <main className="flex-1 p-6">{children}</main>
+            <main className="flex-1 p-6 overflow-auto">{children}</main>
         </div>
     </div>
   );
