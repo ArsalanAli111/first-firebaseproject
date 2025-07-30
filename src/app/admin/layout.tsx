@@ -2,14 +2,6 @@
 'use client';
 
 import {
-  SidebarProvider,
-  Sidebar,
-  SidebarContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-} from '@/components/ui/sidebar';
-import {
   LayoutDashboard,
   ShoppingCart,
   Package,
@@ -45,49 +37,30 @@ export default function AdminLayout({
   const pathname = usePathname();
 
   return (
-    <SidebarProvider>
-      <div className="flex h-screen">
-        <Sidebar>
-          <SidebarContent className="p-2 flex flex-col">
-              <div className="flex flex-col h-full">
-              <SidebarMenu className="flex-1 mt-4">
-                  {adminNavItems.map((item) => (
-                  <SidebarMenuItem key={item.href}>
-                      <SidebarMenuButton
-                      asChild
-                      isActive={pathname === item.href}
-                      tooltip={{
-                          children: item.label,
-                      }}
-                      >
-                      <Link href={item.href}>
-                          <item.icon />
-                          <span>{item.label}</span>
-                      </Link>
-                      </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  ))}
-              </SidebarMenu>
-              <div className="mt-auto p-2">
-                  <SidebarMenuItem>
-                      <SidebarMenuButton
-                      asChild
-                      tooltip={{
-                          children: "Back to Shop",
-                      }}
-                      >
-                      <Link href="/">
-                          <Home />
-                          <span>Back to Shop</span>
-                      </Link>
-                      </SidebarMenuButton>
-                  </SidebarMenuItem>
-              </div>
-              </div>
-          </SidebarContent>
-        </Sidebar>
-        <main className="flex-1 p-6 overflow-y-auto">{children}</main>
-      </div>
-    </SidebarProvider>
+    <div className="flex">
+        <aside className="fixed top-16 left-0 h-[calc(100vh-4rem)] w-64 border-r bg-background hidden md:flex flex-col">
+            <div className="flex-grow overflow-y-auto">
+                 <nav className="flex flex-col gap-2 p-4">
+                    {adminNavItems.map((item) => (
+                        <Link
+                            key={item.href}
+                            href={item.href}
+                            className={`flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${pathname === item.href ? 'bg-muted text-primary' : ''}`}
+                        >
+                            <item.icon className="h-4 w-4" />
+                            {item.label}
+                        </Link>
+                    ))}
+                </nav>
+            </div>
+             <div className="mt-auto p-4 border-t">
+                <Link href="/" className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary">
+                    <Home className="h-4 w-4" />
+                    Back to Shop
+                </Link>
+            </div>
+        </aside>
+        <main className="flex-1 p-6 md:ml-64">{children}</main>
+    </div>
   );
 }
