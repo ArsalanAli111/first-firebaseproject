@@ -1,3 +1,4 @@
+
 /**
  * @fileoverview This file contains the type definitions for the Firestore database collections.
  */
@@ -51,6 +52,12 @@ export interface User {
   email: string;
   role: 'admin' | 'customer' | 'staff';
   password?: string;
+  phone?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  country?: string;
 }
 
 // Represents a purchase/procurement record in the 'purchases' collection.

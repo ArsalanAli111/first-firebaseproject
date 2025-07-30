@@ -52,6 +52,9 @@ export default function CustomersPage() {
               <TableRow>
                 <TableHead>Customer</TableHead>
                 <TableHead>Email</TableHead>
+                <TableHead>Phone</TableHead>
+                <TableHead>Country</TableHead>
+                <TableHead>Postal Code</TableHead>
                 <TableHead>
                   <span className="sr-only">Actions</span>
                 </TableHead>
@@ -70,6 +73,9 @@ export default function CustomersPage() {
                     </div>
                   </TableCell>
                   <TableCell>{customer.email}</TableCell>
+                  <TableCell>{customer.phone || 'N/A'}</TableCell>
+                  <TableCell>{customer.country || 'N/A'}</TableCell>
+                  <TableCell>{customer.postalCode || 'N/A'}</TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>

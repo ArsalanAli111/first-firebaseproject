@@ -1,3 +1,4 @@
+
 import type { Product, Category, Order } from './types';
 import type { User, Attribute, Purchase } from './firestore-types';
 
@@ -193,11 +194,11 @@ export const sampleOrders: Order[] = [
 ];
 
 export const users: User[] = [
-  { id: 'user-001', name: 'Alice Admin', email: 'alice@example.com', role: 'admin', password: 'password123' },
-  { id: 'user-007', name: 'Sam Staff', email: 'sam.staff@example.com', role: 'staff', password: 'password123' },
-  { id: 'user-002', name: 'Jane Doe', email: 'jane.doe@example.com', role: 'customer', password: 'password123' },
-  { id: 'user-003', name: 'John Smith', email: 'john.smith@example.com', role: 'customer', password: 'password123' },
-  { id: 'user-004', name: 'Emily Johnson', email: 'emily.j@example.com', role: 'customer', password: 'password123' },
+  { id: 'user-001', name: 'Alice Admin', email: 'alice@example.com', role: 'admin', password: 'password123', phone: '111-222-3333', address: '1 Admin Way', city: 'Adminville', state: 'AD', postalCode: '11111', country: 'USA' },
+  { id: 'user-007', name: 'Sam Staff', email: 'sam.staff@example.com', role: 'staff', password: 'password123', phone: '222-333-4444', address: '2 Staff St', city: 'Workerton', state: 'ST', postalCode: '22222', country: 'USA' },
+  { id: 'user-002', name: 'Jane Doe', email: 'jane.doe@example.com', role: 'customer', password: 'password123', phone: '333-444-5555', address: '123 Perfume Ln', city: 'Scent City', state: 'CA', postalCode: '90210', country: 'USA' },
+  { id: 'user-003', name: 'John Smith', email: 'john.smith@example.com', role: 'customer', password: 'password123', phone: '444-555-6666', address: '456 Aroma Ave', city: 'Fragrance Town', state: 'NY', postalCode: '10001', country: 'USA' },
+  { id: 'user-004', name: 'Emily Johnson', email: 'emily.j@example.com', role: 'customer', password: 'password123', phone: '555-666-7777', address: '789 Scented Blvd', city: 'Olfactory Oasis', state: 'FL', postalCode: '33101', country: 'USA' },
   { id: 'user-005', name: 'Mark S. Brown', email: 'mark.brown@example.com', role: 'customer', password: 'password123' },
   { id: 'user-006', name: 'Sophia Williams', email: 'sophia.w@example.com', role: 'customer', password: 'password123' },
 ];

@@ -66,21 +66,23 @@ export default function UsersPage() {
   const handleSaveUser = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const formData = new FormData(e.currentTarget);
-      const name = formData.get('name') as string;
-      const email = formData.get('email') as string;
-      const role = formData.get('role') as User['role'];
-      const password = formData.get('password') as string;
       
       const newUser: User = {
           id: editingUser ? editingUser.id : `user${users.length + 1}`,
-          name,
-          email,
-          role,
-          ...(password && { password }) // Only add password if it's provided
+          name: formData.get('name') as string,
+          email: formData.get('email') as string,
+          role: formData.get('role') as User['role'],
+          password: formData.get('password') as string,
+          phone: formData.get('phone') as string,
+          address: formData.get('address') as string,
+          city: formData.get('city') as string,
+          state: formData.get('state') as string,
+          postalCode: formData.get('postalCode') as string,
+          country: formData.get('country') as string,
       };
 
       if (editingUser) {
-          setUsers(users.map(u => u.id === newUser.id ? { ...u, ...newUser, password: password || u.password } : u));
+          setUsers(users.map(u => u.id === newUser.id ? { ...u, ...newUser, password: newUser.password || u.password } : u));
       } else {
           setUsers([...users, newUser]);
       }
@@ -114,7 +116,8 @@ export default function UsersPage() {
               <TableRow>
                 <TableHead>User</TableHead>
                 <TableHead>Email</TableHead>
-                <TableHead>Password</TableHead>
+                <TableHead>Phone</TableHead>
+                <TableHead>Country</TableHead>
                 <TableHead>Role</TableHead>
                 <TableHead>
                   <span className="sr-only">Actions</span>
@@ -134,11 +137,8 @@ export default function UsersPage() {
                     </div>
                   </TableCell>
                   <TableCell>{user.email}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline" className="font-mono">
-                        {user.password ? '********' : 'N/A'}
-                    </Badge>
-                  </TableCell>
+                  <TableCell>{user.phone || 'N/A'}</TableCell>
+                  <TableCell>{user.country || 'N/A'}</TableCell>
                   <TableCell>
                     <Badge variant={getRoleBadgeVariant(user.role)}>
                         {user.role}
@@ -171,7 +171,7 @@ export default function UsersPage() {
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[625px]">
                  <form onSubmit={handleSaveUser}>
                     <DialogHeader>
                         <DialogTitle>{editingUser ? 'Edit User' : 'Add User'}</DialogTitle>
@@ -179,7 +179,7 @@ export default function UsersPage() {
                            {editingUser ? 'Update the user details.' : 'Fill out the form to add a new user.'}
                         </DialogDescription>
                     </DialogHeader>
-                    <div className="grid gap-4 py-4">
+                    <div className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto pr-6">
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="name" className="text-right">Name</Label>
                             <Input id="name" name="name" defaultValue={editingUser?.name} className="col-span-3" required />
@@ -191,6 +191,30 @@ export default function UsersPage() {
                          <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="password" className="text-right">Password</Label>
                             <Input id="password" name="password" type="password" className="col-span-3" required={!editingUser} placeholder={editingUser ? 'Leave blank to keep unchanged' : ''} />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="phone" className="text-right">Phone</Label>
+                            <Input id="phone" name="phone" defaultValue={editingUser?.phone} className="col-span-3" />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="address" className="text-right">Address</Label>
+                            <Input id="address" name="address" defaultValue={editingUser?.address} className="col-span-3" />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="city" className="text-right">City</Label>
+                            <Input id="city" name="city" defaultValue={editingUser?.city} className="col-span-3" />
+                        </div>
+                         <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="state" className="text-right">State</Label>
+                            <Input id="state" name="state" defaultValue={editingUser?.state} className="col-span-3" />
+                        </div>
+                         <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="postalCode" className="text-right">Postal Code</Label>
+                            <Input id="postalCode" name="postalCode" defaultValue={editingUser?.postalCode} className="col-span-3" />
+                        </div>
+                         <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="country" className="text-right">Country</Label>
+                            <Input id="country" name="country" defaultValue={editingUser?.country} className="col-span-3" />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="role" className="text-right">Role</Label>
