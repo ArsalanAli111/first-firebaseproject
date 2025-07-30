@@ -69,16 +69,18 @@ export default function UsersPage() {
       const name = formData.get('name') as string;
       const email = formData.get('email') as string;
       const role = formData.get('role') as User['role'];
+      const password = formData.get('password') as string;
       
       const newUser: User = {
           id: editingUser ? editingUser.id : `user${users.length + 1}`,
           name,
           email,
-          role
+          role,
+          ...(password && { password }) // Only add password if it's provided
       };
 
       if (editingUser) {
-          setUsers(users.map(u => u.id === newUser.id ? newUser : u));
+          setUsers(users.map(u => u.id === newUser.id ? { ...u, ...newUser } : u));
       } else {
           setUsers([...users, newUser]);
       }
@@ -87,7 +89,8 @@ export default function UsersPage() {
 
   const getRoleBadgeVariant = (role: User['role']) => {
     if (role === 'admin') return 'destructive';
-    return 'secondary';
+    if (role === 'staff') return 'secondary';
+    return 'outline';
   }
 
   return (
@@ -179,6 +182,10 @@ export default function UsersPage() {
                             <Label htmlFor="email" className="text-right">Email</Label>
                             <Input id="email" name="email" type="email" defaultValue={editingUser?.email} className="col-span-3" required />
                         </div>
+                         <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="password" className="text-right">Password</Label>
+                            <Input id="password" name="password" type="password" className="col-span-3" required={!editingUser} placeholder={editingUser ? 'Leave blank to keep unchanged' : ''} />
+                        </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="role" className="text-right">Role</Label>
                              <Select name="role" defaultValue={editingUser?.role || 'customer'}>
@@ -187,6 +194,7 @@ export default function UsersPage() {
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="customer">Customer</SelectItem>
+                                    <SelectItem value="staff">Staff</SelectItem>
                                     <SelectItem value="admin">Admin</SelectItem>
                                 </SelectContent>
                             </Select>

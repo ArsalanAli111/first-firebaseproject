@@ -194,6 +194,7 @@ export const sampleOrders: Order[] = [
 
 export const users: User[] = [
   { id: 'user-001', name: 'Alice Admin', email: 'alice@example.com', role: 'admin' },
+  { id: 'user-007', name: 'Sam Staff', email: 'sam.staff@example.com', role: 'staff' },
   { id: 'user-002', name: 'Jane Doe', email: 'jane.doe@example.com', role: 'customer' },
   { id: 'user-003', name: 'John Smith', email: 'john.smith@example.com', role: 'customer' },
   { id: 'user-004', name: 'Emily Johnson', email: 'emily.j@example.com', role: 'customer' },

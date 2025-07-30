@@ -49,7 +49,8 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  role: 'admin' | 'customer';
+  role: 'admin' | 'customer' | 'staff';
+  password?: string;
 }
 
 // Represents a purchase/procurement record in the 'purchases' collection.
