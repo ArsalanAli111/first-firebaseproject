@@ -20,7 +20,7 @@ export function Header() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   // This is a placeholder for auth state. In a real app, you'd use a proper auth hook.
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(true); // Placeholder for admin role
+  const [isAdmin, setIsAdmin] = useState(false); // Placeholder for admin role
 
   return (
     <header className="fixed top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -35,7 +35,7 @@ export function Header() {
                 {link.label}
               </Link>
             ))}
-            {isAdmin && (
+            {isAdmin && isAuthenticated && (
                <Link href="/admin/dashboard" className="transition-colors hover:text-accent font-semibold text-primary">
                 Dashboard
               </Link>
@@ -83,7 +83,7 @@ export function Header() {
                       {link.label}
                     </Link>
                   ))}
-                   {isAdmin && (
+                   {isAdmin && isAuthenticated && (
                     <Link href="/admin/dashboard" className="transition-colors hover:text-accent font-semibold text-primary" onClick={() => setMobileMenuOpen(false)}>
                       <LayoutDashboard className="mr-2 inline-block h-5 w-5" />
                       Admin
