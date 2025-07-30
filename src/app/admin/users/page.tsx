@@ -80,7 +80,7 @@ export default function UsersPage() {
       };
 
       if (editingUser) {
-          setUsers(users.map(u => u.id === newUser.id ? { ...u, ...newUser } : u));
+          setUsers(users.map(u => u.id === newUser.id ? { ...u, ...newUser, password: password || u.password } : u));
       } else {
           setUsers([...users, newUser]);
       }
@@ -114,6 +114,7 @@ export default function UsersPage() {
               <TableRow>
                 <TableHead>User</TableHead>
                 <TableHead>Email</TableHead>
+                <TableHead>Password</TableHead>
                 <TableHead>Role</TableHead>
                 <TableHead>
                   <span className="sr-only">Actions</span>
@@ -133,6 +134,11 @@ export default function UsersPage() {
                     </div>
                   </TableCell>
                   <TableCell>{user.email}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className="font-mono">
+                        {user.password ? '********' : 'N/A'}
+                    </Badge>
+                  </TableCell>
                   <TableCell>
                     <Badge variant={getRoleBadgeVariant(user.role)}>
                         {user.role}
