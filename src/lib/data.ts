@@ -21,6 +21,7 @@ export const products: Product[] = [
     slug: 'ocean-breeze',
     stock: 15,
     reviews: [{ rating: 5, text: 'Absolutely invigorating!', author: 'John D.' }],
+    attributes: { 'Scent Profile': 'Aquatic', 'Size': '100ml' },
   },
   {
     id: 'p2',
@@ -33,6 +34,7 @@ export const products: Product[] = [
     slug: 'midnight-oud',
     stock: 8,
     reviews: [{ rating: 5, text: 'Powerful and long-lasting.', author: 'Mark S.' }],
+    attributes: { 'Scent Profile': 'Smoky', 'Size': '50ml' },
   },
   {
     id: 'p3',
@@ -45,6 +47,7 @@ export const products: Product[] = [
     slug: 'velvet-rose',
     stock: 20,
     reviews: [{ rating: 4, text: 'Beautiful and romantic.', author: 'Jane A.' }],
+    attributes: { 'Scent Profile': 'Floral', 'Size': '100ml' },
   },
   {
     id: 'p4',
@@ -57,6 +60,7 @@ export const products: Product[] = [
     slug: 'citrus-glow',
     stock: 25,
     reviews: [{ rating: 5, text: 'My new favorite summer scent!', author: 'Emily R.' }],
+    attributes: { 'Scent Profile': 'Citrus', 'Size': '50ml' },
   },
   {
     id: 'p5',
@@ -69,6 +73,7 @@ export const products: Product[] = [
     slug: 'discovery-tester-set',
     stock: 50,
     reviews: [{ rating: 5, text: 'Great way to find a favorite.', author: 'Chris P.' }],
+    attributes: { 'Size': '5x2ml' },
   },
   {
     id: 'p6',
@@ -81,6 +86,7 @@ export const products: Product[] = [
     slug: 'luxury-gift-box',
     stock: 10,
     reviews: [{ rating: 5, text: 'Stunning presentation and value.', author: 'Sophia L.' }],
+    attributes: { 'Contents': '3 items' },
   },
   {
     id: 'p7',
@@ -93,6 +99,7 @@ export const products: Product[] = [
     slug: 'ember-spice',
     stock: 18,
     reviews: [{ rating: 5, text: 'Feels like a warm hug.', author: 'David C.' }],
+    attributes: { 'Scent Profile': 'Spicy', 'Size': '100ml' },
   },
   {
     id: 'p8',
@@ -105,6 +112,7 @@ export const products: Product[] = [
     slug: 'solar-musk',
     stock: 22,
     reviews: [{ rating: 4, text: 'Subtle yet very sophisticated.', author: 'Olivia W.' }],
+    attributes: { 'Scent Profile': 'Musk', 'Size': '50ml' },
   },
 ];
 

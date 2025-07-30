@@ -40,7 +40,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { MoreHorizontal, PlusCircle, File } from 'lucide-react';
-import { products as initialProducts } from '@/lib/data';
+import { products as initialProducts, categories } from '@/lib/data';
 import type { Product } from '@/lib/types';
 import Image from 'next/image';
 
@@ -77,6 +77,7 @@ export default function ProductsPage() {
           images: editingProduct?.images || ['https://placehold.co/600x600.png'],
           slug: (formData.get('name') as string).toLowerCase().replace(/\s+/g, '-'),
           reviews: editingProduct?.reviews || [],
+          attributes: editingProduct?.attributes || {}, // Default to empty object
       };
 
       if (editingProduct) {
@@ -85,6 +86,10 @@ export default function ProductsPage() {
           setProducts([...products, newProduct]);
       }
       setIsDialogOpen(false);
+  }
+
+  const getCategoryName = (slug: string) => {
+    return categories.find(c => c.slug === slug)?.name || 'N/A';
   }
 
   return (
@@ -116,7 +121,8 @@ export default function ProductsPage() {
                   <span className="sr-only">Image</span>
                 </TableHead>
                 <TableHead>Name</TableHead>
-                <TableHead>Status</TableHead>
+                <TableHead>Category</TableHead>
+                <TableHead className="hidden md:table-cell">Attributes</TableHead>
                 <TableHead>Price</TableHead>
                 <TableHead className="hidden md:table-cell">Stock</TableHead>
                 <TableHead>
@@ -137,11 +143,14 @@ export default function ProductsPage() {
                     />
                   </TableCell>
                   <TableCell className="font-medium">{product.name}</TableCell>
-                  <TableCell>
-                     <Badge variant={product.stock > 0 ? 'default' : 'destructive'} className={product.stock > 10 ? 'bg-green-600' : product.stock > 0 ? 'bg-yellow-500' : ''}>
-                      {product.stock > 0 ? 'In Stock' : 'Out of Stock'}
-                    </Badge>
-                  </TableCell>
+                   <TableCell>{getCategoryName(product.category)}</TableCell>
+                   <TableCell className="hidden md:table-cell">
+                        <div className="flex flex-wrap gap-1">
+                            {Object.entries(product.attributes).map(([key, value]) => (
+                                <Badge key={key} variant="secondary">{`${key}: ${value}`}</Badge>
+                            ))}
+                        </div>
+                   </TableCell>
                   <TableCell>${product.price.toFixed(2)}</TableCell>
                   <TableCell className="hidden md:table-cell">{product.stock}</TableCell>
                   <TableCell>
@@ -195,6 +204,10 @@ export default function ProductsPage() {
                          <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="category" className="text-right">Category</Label>
                             <Input id="category" name="category" defaultValue={editingProduct?.category} className="col-span-3" required />
+                        </div>
+                         <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="attributes" className="text-right">Attributes</Label>
+                            <Textarea id="attributes" name="attributes" defaultValue={JSON.stringify(editingProduct?.attributes || {})} className="col-span-3" placeholder='e.g. {"size": "50ml"}' />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="stock" className="text-right">Stock</Label>
