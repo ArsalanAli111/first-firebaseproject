@@ -223,12 +223,12 @@ export const attributes: Attribute[] = [
 
 
 export const salesData = [
-  { name: 'Jan', sales: 4000 },
-  { name: 'Feb', sales: 3000 },
-  { name: 'Mar', sales: 5000 },
-  { name: 'Apr', sales: 4500 },
-  { name: 'May', sales: 6000 },
-  { name: 'Jun', sales: 5500 },
+  { name: 'Jan', sales: 4000, revenue: 2400 },
+  { name: 'Feb', sales: 3000, revenue: 1398 },
+  { name: 'Mar', sales: 5000, revenue: 9800 },
+  { name: 'Apr', sales: 4500, revenue: 3908 },
+  { name: 'May', sales: 6000, revenue: 4800 },
+  { name: 'Jun', sales: 5500, revenue: 3800 },
 ];
 
 export const newCustomersData = [
