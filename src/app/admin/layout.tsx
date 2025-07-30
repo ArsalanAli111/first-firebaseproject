@@ -45,11 +45,11 @@ export default function AdminLayout({
   const pathname = usePathname();
 
   return (
-    <SidebarProvider>
-        <div className="flex">
-            <aside className="sticky top-16 h-[calc(100vh-4rem)]">
+    <div className="flex h-[calc(100vh-4rem)]">
+        <SidebarProvider>
+            <aside className="sticky top-16 h-full">
               <Sidebar collapsible="icon">
-              <SidebarContent className="p-2 flex flex-col">
+              <SidebarContent className="p-2 flex flex-col overflow-y-auto">
                   <div className="flex flex-col h-full">
                   <SidebarMenu className="flex-1 mt-4">
                       {adminNavItems.map((item) => (
@@ -88,8 +88,8 @@ export default function AdminLayout({
               </SidebarContent>
               </Sidebar>
             </aside>
-            <main className="flex-1 p-6">{children}</main>
-        </div>
-    </SidebarProvider>
+            <main className="flex-1 p-6 overflow-y-auto">{children}</main>
+        </SidebarProvider>
+    </div>
   );
 }
