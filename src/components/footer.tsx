@@ -5,9 +5,9 @@ import { Button } from './ui/button';
 
 const staticLinks = [
   { href: "/shipping-policy", label: "Shipping Policy" },
-  { href: "/shipping-policy", label: "Refund Policy" },
-  { href: "/shipping-policy", label: "Privacy Policy" },
-  { href: "/shipping-policy", label: "Terms of Service" },
+  { href: "/refund-policy", label: "Refund Policy" },
+  { href: "/privacy-policy", label: "Privacy Policy" },
+  { href: "/terms-of-service", label: "Terms of Service" },
   { href: "/contact", label: "Contact Us" },
 ];
 
@@ -33,7 +33,7 @@ export function Footer() {
             <h4 className="font-semibold font-headline">Information</h4>
             <ul className="mt-4 space-y-2 text-sm">
               {staticLinks.map(link => (
-                <li key={`${link.href}-${link.label}`}>
+                <li key={link.href}>
                   <Link href={link.href} className="hover:text-accent transition-colors">
                     {link.label}
                   </Link>
