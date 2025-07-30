@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MoreHorizontal, File, PlusCircle } from 'lucide-react';
-import { sampleOrders, products } from '@/lib/data';
+import { sampleOrders, products, categories } from '@/lib/data';
 import type { Order } from '@/lib/types';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
@@ -62,6 +62,10 @@ export default function OrdersPage() {
     }
   };
 
+  const getCategoryName = (slug: string) => {
+    return categories.find(c => c.slug === slug)?.name || 'N/A';
+  }
+
 
   const renderOrderRows = (filteredOrders: Order[]) => {
      if (filteredOrders.length === 0) {
@@ -112,18 +116,29 @@ export default function OrdersPage() {
         </TableRow>
         <TableRow>
             <TableCell colSpan={6} className="p-0">
-                 <div className="p-4 space-y-2 bg-muted/50">
+                 <div className="p-4 space-y-4 bg-muted/50">
                     <h4 className="font-semibold">Order Items:</h4>
-                    {order.items && order.items.map(item => (
-                         <div key={item.id} className="flex items-center gap-4 py-1">
+                    {order.items && order.items.map(item => {
+                      const product = products.find(p => p.id === item.id);
+                      return (
+                         <div key={item.id} className="flex items-start gap-4 py-2 border-b last:border-0">
                             <Image src={item.imageUrl} alt={item.name} width={40} height={40} className="rounded-md" />
                             <div className="flex-grow">
                                 <p className="font-medium text-sm">{item.name}</p>
                                 <p className="text-xs text-muted-foreground">Qty: {item.quantity}</p>
+                                {product && (
+                                  <div className="mt-1">
+                                    <Badge variant="outline" className="mr-1">{getCategoryName(product.category)}</Badge>
+                                    {product.attributes && Object.entries(product.attributes).map(([key, value]) => (
+                                      <Badge key={key} variant="secondary" className="mr-1">{`${key}: ${value}`}</Badge>
+                                    ))}
+                                  </div>
+                                )}
                             </div>
                             <p className="text-sm font-medium">${(item.price * item.quantity).toFixed(2)}</p>
                         </div>
-                    ))}
+                      )
+                    })}
                  </div>
             </TableCell>
         </TableRow>
