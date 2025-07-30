@@ -3,7 +3,7 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
-import { CartProvider } from '@/hooks/use-cart';
+import { CartProvider } from '@/hooks/use-cart.tsx';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
