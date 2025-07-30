@@ -1,3 +1,4 @@
+
 import { ProductCard } from '@/components/product-card';
 import { products, categories } from '@/lib/data';
 import { notFound } from 'next/navigation';
@@ -11,11 +12,23 @@ export async function generateStaticParams() {
 export default function CategoryPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
   const category = categories.find(c => c.slug === slug);
-  const filteredProducts = products.filter(p => p.category === slug);
   
   if (!category) {
     notFound();
   }
+
+  // Find all child category slugs
+  const childCategoryIds = categories
+    .filter(c => c.parentId === category.id)
+    .map(c => c.id);
+  
+  const childCategorySlugs = categories
+    .filter(c => childCategoryIds.includes(c.id) || c.parentId && childCategoryIds.includes(c.parentId))
+    .map(c => c.slug);
+
+  const relevantCategorySlugs = [slug, ...childCategorySlugs];
+  
+  const filteredProducts = products.filter(p => relevantCategorySlugs.includes(p.category));
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
