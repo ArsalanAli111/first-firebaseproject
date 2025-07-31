@@ -59,4 +59,5 @@ export type Order = {
   customer: CustomerInfo;
   items: OrderItem[];
   createdAt?: Timestamp;
+  paymentMethod?: 'Credit Card' | 'Cash on Delivery';
 };

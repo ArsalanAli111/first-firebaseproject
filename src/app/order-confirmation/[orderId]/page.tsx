@@ -83,6 +83,10 @@ export default function OrderConfirmationPage() {
                             <span>Order Date:</span>
                             <span>{order.date}</span>
                         </div>
+                         <div className="flex justify-between text-muted-foreground">
+                            <span>Payment Method:</span>
+                            <span>{order.paymentMethod}</span>
+                        </div>
                     </div>
                     
                     <div className="space-y-4">

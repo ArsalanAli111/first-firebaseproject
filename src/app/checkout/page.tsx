@@ -13,12 +13,15 @@ import { useToast } from '@/hooks/use-toast';
 import { createOrder } from '@/app/actions';
 import type { OrderItem } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 export default function CheckoutPage() {
   const { cartItems, totalPrice, clearCart } = useCart();
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = React.useState(false);
+  const [paymentMethod, setPaymentMethod] = React.useState<'Credit Card' | 'Cash on Delivery'>('Credit Card');
+
 
   const handlePlaceOrder = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -50,7 +53,8 @@ export default function CheckoutPage() {
                 postalCode: formData.get('zip') as string,
             },
             items: orderItems,
-            total: totalPrice
+            total: totalPrice,
+            paymentMethod: paymentMethod,
         });
 
         toast({
@@ -127,20 +131,35 @@ export default function CheckoutPage() {
                 </div>
 
                 <h3 className="text-xl font-headline pt-4">Payment Details</h3>
-                 <div className="space-y-2">
-                    <Label htmlFor="card-number">Card Number</Label>
-                    <Input id="card-number" placeholder="**** **** **** 1234" required />
-                </div>
-                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="expiry">Expiry Date</Label>
-                    <Input id="expiry" placeholder="MM/YY" required />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="cvc">CVC</Label>
-                    <Input id="cvc" placeholder="123" required />
-                  </div>
-                </div>
+                 <RadioGroup defaultValue="Credit Card" onValueChange={(value: 'Credit Card' | 'Cash on Delivery') => setPaymentMethod(value)}>
+                    <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="Credit Card" id="r1" />
+                        <Label htmlFor="r1">Credit Card</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="Cash on Delivery" id="r2" />
+                        <Label htmlFor="r2">Cash on Delivery</Label>
+                    </div>
+                </RadioGroup>
+
+                {paymentMethod === 'Credit Card' && (
+                    <div className="space-y-4 pt-4 border-t mt-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="card-number">Card Number</Label>
+                            <Input id="card-number" placeholder="**** **** **** 1234" required={paymentMethod === 'Credit Card'} />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="expiry">Expiry Date</Label>
+                            <Input id="expiry" placeholder="MM/YY" required={paymentMethod === 'Credit Card'} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="cvc">CVC</Label>
+                            <Input id="cvc" placeholder="123" required={paymentMethod === 'Credit Card'} />
+                        </div>
+                        </div>
+                    </div>
+                )}
                 
                 <Button type="submit" size="lg" className="w-full mt-6 bg-accent hover:bg-accent/90" disabled={loading}>
                   {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

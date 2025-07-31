@@ -39,6 +39,7 @@ export async function createOrder(orderData: {
   customer: CustomerInfo;
   items: OrderItem[];
   total: number;
+  paymentMethod: 'Credit Card' | 'Cash on Delivery';
 }) {
     try {
         const orderToCreate = {
@@ -74,6 +75,7 @@ export async function getOrderById(orderId: string): Promise<Order | null> {
             total: data.total,
             items: data.items,
             createdAt: data.createdAt,
+            paymentMethod: data.paymentMethod,
         };
     } catch (error) {
         console.error("Error fetching order:", error);

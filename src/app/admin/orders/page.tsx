@@ -37,6 +37,7 @@ export default function OrdersPage() {
                 total: data.total,
                 items: data.items,
                 createdAt: data.createdAt,
+                paymentMethod: data.paymentMethod
             });
         });
         setOrders(ordersData);
@@ -171,6 +172,9 @@ export default function OrdersPage() {
                 </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4 max-h-[60vh] overflow-y-auto pr-4">
+                <div className="text-sm">
+                    <span className="font-semibold">Payment Method:</span> {selectedOrder?.paymentMethod || 'N/A'}
+                </div>
                {selectedOrder?.items.map(item => (
                  <div key={item.id} className="flex items-start gap-4 py-2 border-b last:border-0">
                     <Image src={item.imageUrl} alt={item.name} width={60} height={60} className="rounded-md" data-ai-hint="perfume bottle" />
