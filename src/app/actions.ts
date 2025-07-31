@@ -50,11 +50,13 @@ export async function createOrder(orderData: {
             status: 'Pending',
             createdAt: serverTimestamp()
         };
-        const orderRef = await addDoc(collection(firestore, 'orders'), orderToCreate);
-        return { success: true, orderId: orderRef.id };
+        const docRef = await addDoc(collection(firestore, 'orders'), orderToCreate);
+        return { success: true, orderId: docRef.id };
     } catch (error) {
         console.error("Error creating order in Firestore:", error);
-        throw new Error("Could not create order.");
+        // It's better to throw the error so the client can catch a detailed message.
+        // The generic message is handled in the UI component.
+        throw new Error("Could not create order in database.");
     }
 }
 
@@ -65,22 +67,28 @@ export async function getOrderById(orderId: string): Promise<Order | null> {
         const orderSnap = await getDoc(orderRef);
 
         if (!orderSnap.exists()) {
+            console.warn(`Order with ID ${orderId} not found.`);
             return null;
         }
 
         const data = orderSnap.data();
+        // Convert Firestore Timestamp to a readable date string
+        const date = data.createdAt instanceof Timestamp 
+            ? data.createdAt.toDate().toLocaleDateString()
+            : new Date().toLocaleDateString();
+
         return {
             id: orderSnap.id,
-            date: (data.createdAt as Timestamp)?.toDate().toLocaleDateString() || new Date().toLocaleDateString(),
-            status: data.status,
+            date: date,
+            status: data.status || 'Pending',
             customer: data.customer,
             total: data.total,
             items: data.items,
-            createdAt: data.createdAt,
-            paymentMethod: data.paymentMethod,
+            createdAt: data.createdAt, // keep original timestamp if needed
+            paymentMethod: data.paymentMethod || 'N/A',
         };
     } catch (error) {
-        console.error("Error fetching order:", error);
-        throw new Error("Could not retrieve order.");
+        console.error(`Error fetching order ${orderId}:`, error);
+        throw new Error("Could not retrieve order details.");
     }
 }

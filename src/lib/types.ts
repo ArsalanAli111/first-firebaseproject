@@ -38,10 +38,18 @@ export type CartItem = {
   imageUrl: string;
 };
 
-export type OrderItem = Omit<CartItem, 'quantity'> & { quantity: number };
+// Represents a single item within an order
+export type OrderItem = {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  imageUrl: string;
+};
 
 export type OrderStatus = 'Pending' | 'Shipped' | 'Delivered' | 'Cancelled';
 
+// Customer information collected at checkout
 export type CustomerInfo = {
   name: string;
   email: string;
@@ -52,6 +60,7 @@ export type CustomerInfo = {
   country: string;
 };
 
+// The structure of an Order document in Firestore
 export type Order = {
   id: string;
   date: string;
@@ -60,5 +69,5 @@ export type Order = {
   customer: CustomerInfo;
   items: OrderItem[];
   createdAt?: Timestamp;
-  paymentMethod?: 'Credit Card' | 'Cash on Delivery';
+  paymentMethod: 'Credit Card' | 'Cash on Delivery' | 'N/A';
 };

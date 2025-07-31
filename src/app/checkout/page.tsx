@@ -58,7 +58,7 @@ export default function CheckoutPage() {
             paymentMethod: paymentMethod,
         });
 
-        if (result.success) {
+        if (result.success && result.orderId) {
             toast({
                 title: "Order Placed Successfully!",
                 description: "Thank you for your purchase. We've received your order.",
@@ -66,7 +66,7 @@ export default function CheckoutPage() {
             clearCart();
             router.push(`/order-confirmation/${result.orderId}`);
         } else {
-            throw new Error("Order creation failed.");
+            throw new Error(result.error || "Order creation failed unexpectedly.");
         }
     } catch (error) {
         console.error("Failed to create order:", error);
@@ -83,7 +83,7 @@ export default function CheckoutPage() {
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <h1 className="text-4xl font-bold font-headline mb-8 text-center">Checkout</h1>
-       {cartItems.length === 0 ? (
+       {cartItems.length === 0 && !loading ? (
         <Card className="text-center p-8">
             <CardTitle>Your cart is empty</CardTitle>
             <CardContent className="mt-4">
@@ -140,7 +140,7 @@ export default function CheckoutPage() {
                 </div>
 
                 <h3 className="text-xl font-headline pt-4">Payment Details</h3>
-                 <RadioGroup defaultValue="Credit Card" onValueChange={(value: 'Credit Card' | 'Cash on Delivery') => setPaymentMethod(value)}>
+                 <RadioGroup defaultValue="Credit Card" name="paymentMethod" onValueChange={(value: 'Credit Card' | 'Cash on Delivery') => setPaymentMethod(value)}>
                     <div className="flex items-center space-x-2">
                         <RadioGroupItem value="Credit Card" id="r1" />
                         <Label htmlFor="r1">Credit Card</Label>
