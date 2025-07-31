@@ -67,83 +67,104 @@ export default function OrdersPage() {
   }
 
 
-  const renderOrderRows = (filteredOrders: Order[]) => {
-     if (filteredOrders.length === 0) {
-      return (
-        <TableRow>
-          <TableCell colSpan={6} className="h-24 text-center">
-            No orders found.
-          </TableCell>
-        </TableRow>
-      );
-    }
-    return filteredOrders.map(order => (
-      <React.Fragment key={order.id}>
-        <TableRow>
-            <TableCell className="font-medium">{order.id}</TableCell>
-            <TableCell>
-                <div className="font-medium">{order.customer.name}</div>
-                <div className="text-sm text-muted-foreground">{order.customer.email}</div>
-            </TableCell>
-            <TableCell className="hidden md:table-cell">{order.date}</TableCell>
-            <TableCell>
-            <Badge className={getStatusClass(order.status)}>
-                {order.status}
-            </Badge>
-            </TableCell>
-            <TableCell className="text-right">${order.total.toFixed(2)}</TableCell>
-            <TableCell>
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                    <span className="sr-only">Open menu</span>
-                    <MoreHorizontal className="h-4 w-4" />
-                </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem onClick={() => handleEditOrder(order)}>
-                    Edit Order
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel>Change Status</DropdownMenuLabel>
-                <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Pending')}>Pending</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Shipped')}>Shipped</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Delivered')}>Delivered</DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
-            </TableCell>
-        </TableRow>
-        <TableRow>
-            <TableCell colSpan={6} className="p-0">
-                 <div className="p-4 space-y-4 bg-muted/50">
-                    <h4 className="font-semibold">Order Items:</h4>
-                    {order.items && order.items.map(item => {
-                      const product = products.find(p => p.id === item.id);
-                      return (
-                         <div key={item.id} className="flex items-start gap-4 py-2 border-b last:border-0">
-                            <Image src={item.imageUrl} alt={item.name} width={40} height={40} className="rounded-md" data-ai-hint="perfume bottle" />
-                            <div className="flex-grow">
-                                <p className="font-medium text-sm">{item.name}</p>
-                                <p className="text-xs text-muted-foreground">Qty: {item.quantity}</p>
-                                {product && (
-                                  <div className="mt-1">
-                                    <Badge variant="outline" className="mr-1">{getCategoryName(product.category)}</Badge>
-                                    {product.attributes && Object.entries(product.attributes).map(([key, value]) => (
-                                      <Badge key={key} variant="secondary" className="mr-1">{`${key}: ${value}`}</Badge>
-                                    ))}
-                                  </div>
-                                )}
-                            </div>
-                            <p className="text-sm font-medium">${(item.price * item.quantity).toFixed(2)}</p>
-                        </div>
-                      )
-                    })}
-                 </div>
-            </TableCell>
-        </TableRow>
-      </React.Fragment>
-    ));
+  const renderOrderTable = (filteredOrders: Order[]) => {
+    return (
+      <Card>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Order ID</TableHead>
+                <TableHead>Customer</TableHead>
+                <TableHead className="hidden md:table-cell">Date</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="text-right">Total</TableHead>
+                <TableHead>
+                  <span className="sr-only">Actions</span>
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredOrders.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={6} className="h-24 text-center">
+                    No orders found.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredOrders.map(order => (
+                  <React.Fragment key={order.id}>
+                    <TableRow>
+                        <TableCell className="font-medium">{order.id}</TableCell>
+                        <TableCell>
+                            <div className="font-medium">{order.customer.name}</div>
+                            <div className="text-sm text-muted-foreground">{order.customer.email}</div>
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell">{order.date}</TableCell>
+                        <TableCell>
+                        <Badge className={getStatusClass(order.status)}>
+                            {order.status}
+                        </Badge>
+                        </TableCell>
+                        <TableCell className="text-right">${order.total.toFixed(2)}</TableCell>
+                        <TableCell>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuItem onClick={() => handleEditOrder(order)}>
+                                Edit Order
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuLabel>Change Status</DropdownMenuLabel>
+                            <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Pending')}>Pending</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Shipped')}>Shipped</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleStatusChange(order.id, 'Delivered')}>Delivered</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell colSpan={6} className="p-0">
+                             <div className="p-4 space-y-4 bg-muted/50">
+                                <h4 className="font-semibold">Order Items:</h4>
+                                {order.items && order.items.map(item => {
+                                  const product = products.find(p => p.id === item.id);
+                                  return (
+                                     <div key={item.id} className="flex items-start gap-4 py-2 border-b last:border-0">
+                                        <Image src={item.imageUrl} alt={item.name} width={40} height={40} className="rounded-md" data-ai-hint="perfume bottle" />
+                                        <div className="flex-grow">
+                                            <p className="font-medium text-sm">{item.name}</p>
+                                            <p className="text-xs text-muted-foreground">Qty: {item.quantity}</p>
+                                            {product && (
+                                              <div className="mt-1">
+                                                <Badge variant="outline" className="mr-1">{getCategoryName(product.category)}</Badge>
+                                                {product.attributes && Object.entries(product.attributes).map(([key, value]) => (
+                                                  <Badge key={key} variant="secondary" className="mr-1">{`${key}: ${value}`}</Badge>
+                                                ))}
+                                              </div>
+                                            )}
+                                        </div>
+                                        <p className="text-sm font-medium">${(item.price * item.quantity).toFixed(2)}</p>
+                                    </div>
+                                  )
+                                })}
+                             </div>
+                        </TableCell>
+                    </TableRow>
+                  </React.Fragment>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    );
   };
 
   return (
@@ -171,38 +192,20 @@ export default function OrdersPage() {
             </Button>
         </div>
       </div>
-      <Card className="mt-4">
-        <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Order ID</TableHead>
-                  <TableHead>Customer</TableHead>
-                  <TableHead className="hidden md:table-cell">Date</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Total</TableHead>
-                  <TableHead>
-                    <span className="sr-only">Actions</span>
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-                <TableBody>
-                    <TabsContent value="all" className="contents">
-                        {renderOrderRows(orders)}
-                    </TabsContent>
-                    <TabsContent value="pending" className="contents">
-                        {renderOrderRows(orders.filter(o => o.status === 'Pending'))}
-                    </TabsContent>
-                    <TabsContent value="shipped" className="contents">
-                        {renderOrderRows(orders.filter(o => o.status === 'Shipped'))}
-                    </TabsContent>
-                    <TabsContent value="delivered" className="contents">
-                        {renderOrderRows(orders.filter(o => o.status === 'Delivered'))}
-                    </TabsContent>
-                </TableBody>
-            </Table>
-        </CardContent>
-      </Card>
+      <div className="mt-4">
+        <TabsContent value="all">
+          {renderOrderTable(orders)}
+        </TabsContent>
+        <TabsContent value="pending">
+          {renderOrderTable(orders.filter(o => o.status === 'Pending'))}
+        </TabsContent>
+        <TabsContent value="shipped">
+          {renderOrderTable(orders.filter(o => o.status === 'Shipped'))}
+        </TabsContent>
+        <TabsContent value="delivered">
+          {renderOrderTable(orders.filter(o => o.status === 'Delivered'))}
+        </TabsContent>
+      </div>
     </Tabs>
 
      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
