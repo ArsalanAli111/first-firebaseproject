@@ -41,7 +41,10 @@ export default function Home() {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         <section>
-          <h2 className="text-3xl font-bold text-center mb-8 font-headline">New Arrivals</h2>
+           <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold font-headline">New Arrivals</h2>
+            <p className="mt-2 text-muted-foreground max-w-2xl mx-auto">Discover the latest fragrances carefully curated for you. Stay ahead with our newest arrivals that redefine elegance.</p>
+          </div>
           <Carousel
             opts={{
               align: "start",
@@ -64,7 +67,10 @@ export default function Home() {
         </section>
 
         <section>
-          <h2 className="text-3xl font-bold text-center mb-8 font-headline">Shop by Category</h2>
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold font-headline">Shop by Category</h2>
+            <p className="mt-2 text-muted-foreground max-w-2xl mx-auto">Browse our collection by category to find perfumes that perfectly match your style and personality.</p>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
             {topCategories.map((category) => (
               <Link href={`/category/${category.slug}`} key={category.id} className="group">
@@ -82,7 +88,10 @@ export default function Home() {
         </section>
 
         <section>
-          <h2 className="text-3xl font-bold text-center mb-8 font-headline">Our Best Sellers</h2>
+           <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold font-headline">Our Best Sellers</h2>
+            <p className="mt-2 text-muted-foreground max-w-2xl mx-auto">Explore the most loved fragrances by our customers. These best-sellers are a must-have in your collection.</p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {bestSellers.map((product) => (
               <ProductCard key={product.id} product={product} />
@@ -91,7 +100,10 @@ export default function Home() {
         </section>
         
         <section>
-          <h2 className="text-3xl font-bold text-center mb-8 font-headline">The Luxury Collection</h2>
+           <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold font-headline">The Luxury Collection</h2>
+            <p className="mt-2 text-muted-foreground max-w-2xl mx-auto">Indulge in premium luxury perfumes crafted for those who desire sophistication and timeless elegance.</p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {luxuryCollection.map((product) => (
               <ProductCard key={product.id} product={product} />
