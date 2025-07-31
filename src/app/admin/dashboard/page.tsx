@@ -2,24 +2,23 @@
 'use client'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart as BarChartIcon, Box, FileBarChart, LineChart as LineChartIcon, Package, PieChart as PieChartIcon, ShoppingCart, Tags, Users } from "lucide-react";
+import { BarChart as BarChartIcon, Box, DollarSign, Package, ShoppingCart, Tags, Users } from "lucide-react";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { Bar, BarChart, Line, LineChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Pie, Cell, PieChart } from "recharts";
-import { salesData, newCustomersData, sampleOrders, products as allProducts, attributes as allAttributes, categories as allCategories } from "@/lib/data";
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Pie, Cell, PieChart } from "recharts";
+import { salesData, sampleOrders, products as allProducts, attributes as allAttributes, categories as allCategories, users } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Link from "next/link";
 import React from "react";
-import type { Product } from "@/lib/types";
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF'];
 
 export default function AdminDashboardPage() {
 
-    const totalSales = salesData.reduce((acc, item) => acc + item.sales, 0);
+    const totalRevenue = sampleOrders.reduce((acc, order) => acc + order.total, 0);
     const totalProducts = allProducts.length;
     const totalOrders = sampleOrders.length;
-    const totalCustomers = newCustomersData.reduce((acc, item) => acc + item.newCustomers, 0);
+    const totalCustomers = users.filter(u => u.role === 'customer').length;
     const totalCategories = allCategories.length;
     const totalAttributes = allAttributes.length;
     
@@ -46,11 +45,11 @@ export default function AdminDashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
-            <BarChartIcon className="h-4 w-4 text-muted-foreground" />
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${totalSales.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+            <div className="text-2xl font-bold">${totalRevenue.toLocaleString()}</div>
+            <p className="text-xs text-muted-foreground">Calculated from all orders</p>
           </CardContent>
         </Card>
         <Card>
@@ -60,7 +59,7 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">+{totalOrders}</div>
-            <p className="text-xs text-muted-foreground">Sample data</p>
+            <p className="text-xs text-muted-foreground">Live order count</p>
           </CardContent>
         </Card>
         <Card>
@@ -70,17 +69,17 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalProducts}</div>
-            <p className="text-xs text-muted-foreground">Live count</p>
+            <p className="text-xs text-muted-foreground">Live product count</p>
           </CardContent>
         </Card>
          <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">New Customers</CardTitle>
+            <CardTitle className="text-sm font-medium">Total Customers</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">+{totalCustomers}</div>
-            <p className="text-xs text-muted-foreground">Sample data</p>
+            <p className="text-xs text-muted-foreground">Registered customer count</p>
           </CardContent>
         </Card>
          <Card>
@@ -90,7 +89,7 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalCategories}</div>
-            <p className="text-xs text-muted-foreground">Live count</p>
+            <p className="text-xs text-muted-foreground">Total category count</p>
           </CardContent>
         </Card>
          <Card>
@@ -100,7 +99,7 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalAttributes}</div>
-            <p className="text-xs text-muted-foreground">Live count</p>
+            <p className="text-xs text-muted-foreground">Total attribute types</p>
           </CardContent>
         </Card>
       </div>
@@ -183,7 +182,7 @@ export default function AdminDashboardPage() {
        <Card>
             <CardHeader>
                 <CardTitle>Recent Orders</CardTitle>
-                <CardDescription>A list of the most recent orders (Sample Data).</CardDescription>
+                <CardDescription>A list of the most recent orders.</CardDescription>
             </CardHeader>
             <CardContent>
                 <Table>
@@ -222,4 +221,3 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
-
