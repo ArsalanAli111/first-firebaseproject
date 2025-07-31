@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { BarChart as BarChartIcon, Box, DollarSign, Package, ShoppingCart, Tags, Users } from "lucide-react";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Pie, Cell, PieChart } from "recharts";
-import { salesData, sampleOrders, products as allProducts, attributes as allAttributes, categories as allCategories, users } from "@/lib/data";
+import { sampleOrders, products as allProducts, attributes as allAttributes, categories as allCategories, users } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Link from "next/link";
@@ -35,6 +35,30 @@ export default function AdminDashboardPage() {
     const getCategoryName = (slug: string) => {
         return allCategories.find(c => c.slug === slug)?.name || 'N/A';
     }
+    
+    const monthlySales = React.useMemo(() => {
+        const salesByMonth: Record<string, number> = {};
+        sampleOrders.forEach(order => {
+            const date = new Date(order.date);
+            const month = date.toLocaleString('default', { month: 'short' });
+            salesByMonth[month] = (salesByMonth[month] || 0) + order.total;
+        });
+
+        // Ensure we have data for the last 6 months, even if it's 0
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const currentMonth = new Date().getMonth();
+        const lastSixMonths = [];
+        for (let i = 5; i >= 0; i--) {
+            const monthIndex = (currentMonth - i + 12) % 12;
+            const monthName = monthNames[monthIndex];
+            lastSixMonths.push({
+                name: monthName,
+                sales: salesByMonth[monthName] || 0,
+            });
+        }
+        
+        return lastSixMonths;
+    }, []);
 
 
   return (
@@ -108,12 +132,12 @@ export default function AdminDashboardPage() {
         <Card className="lg:col-span-4">
           <CardHeader>
             <CardTitle>Sales Overview</CardTitle>
-            <CardDescription>Monthly sales performance (Sample Data).</CardDescription>
+            <CardDescription>Monthly sales performance from orders.</CardDescription>
           </CardHeader>
           <CardContent>
              <ChartContainer config={{}} className="h-[300px] w-full">
                 <ResponsiveContainer>
-                    <BarChart data={salesData}>
+                    <BarChart data={monthlySales}>
                         <CartesianGrid vertical={false} />
                         <XAxis dataKey="name" tickLine={false} axisLine={false} tickMargin={8} />
                         <YAxis />
@@ -221,3 +245,5 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
+
+    
