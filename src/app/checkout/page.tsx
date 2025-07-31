@@ -44,6 +44,10 @@ export default function CheckoutPage() {
             customer: {
                 name: `${formData.get('firstName')} ${formData.get('lastName')}`,
                 email: formData.get('email') as string,
+                address: formData.get('address') as string,
+                city: formData.get('city') as string,
+                state: formData.get('state') as string,
+                postalCode: formData.get('zip') as string,
             },
             items: orderItems,
             total: totalPrice

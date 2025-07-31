@@ -3,7 +3,7 @@
 
 import { generateProductRecommendations } from '@/ai/flows/product-recommendations';
 import { products } from '@/lib/data';
-import type { Product, Order, OrderItem } from '@/lib/types';
+import type { Product, Order, OrderItem, CustomerInfo } from '@/lib/types';
 import { firestore } from '@/lib/firebase';
 import { addDoc, collection, doc, getDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
 
@@ -35,14 +35,19 @@ export async function getRecommendedProducts(viewingHistory: string[]): Promise<
   }
 }
 
-export async function createOrder(orderData: Omit<Order, 'id' | 'date' | 'status'>) {
+export async function createOrder(orderData: {
+  customer: CustomerInfo;
+  items: OrderItem[];
+  total: number;
+}) {
     try {
-        const orderRef = await addDoc(collection(firestore, 'orders'), {
+        const orderToCreate = {
             ...orderData,
             date: new Date().toISOString().split('T')[0],
             status: 'Pending', // Default status
             createdAt: serverTimestamp()
-        });
+        };
+        const orderRef = await addDoc(collection(firestore, 'orders'), orderToCreate);
         return { success: true, orderId: orderRef.id };
     } catch (error) {
         console.error("Error creating order in Firestore:", error);

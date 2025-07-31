@@ -42,15 +42,21 @@ export type OrderItem = Omit<CartItem, 'quantity'> & { quantity: number };
 
 export type OrderStatus = 'Pending' | 'Shipped' | 'Delivered' | 'Cancelled';
 
+export type CustomerInfo = {
+  name: string;
+  email: string;
+  address: string;
+  city: string;
+  state: string;
+  postalCode: string;
+};
+
 export type Order = {
   id: string;
   date: string;
   status: OrderStatus;
   total: number;
-  customer: {
-    name: string;
-    email: string;
-  };
+  customer: CustomerInfo;
   items: OrderItem[];
   createdAt?: Timestamp;
 };
