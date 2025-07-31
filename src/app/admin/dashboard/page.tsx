@@ -62,6 +62,12 @@ export default function AdminDashboardPage() {
         return lastSixMonths;
     }, []);
 
+    const recentOrders = React.useMemo(() => {
+        return [...sampleOrders]
+            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+            .slice(0, 5);
+    }, []);
+
 
   return (
     <div className="space-y-6">
@@ -221,7 +227,7 @@ export default function AdminDashboardPage() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {sampleOrders.slice(0, 5).map(order => (
+                        {recentOrders.map(order => (
                             <TableRow key={order.id}>
                                 <TableCell>
                                     <Link href="/admin/orders" className="font-medium text-primary hover:underline">
