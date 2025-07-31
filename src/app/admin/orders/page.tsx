@@ -7,13 +7,15 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, Loader2 } from 'lucide-react';
+import { MoreHorizontal, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { Order, OrderStatus } from '@/lib/types';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import Image from 'next/image';
-import { collection, query, onSnapshot, orderBy, doc, updateDoc, Timestamp } from 'firebase/firestore';
+import { collection, query, onSnapshot, orderBy, doc, updateDoc, Timestamp, limit, startAfter, endBefore, limitToLast, DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
 import { firestore } from '@/lib/firebase';
 import { useToast } from '@/hooks/use-toast';
+
+const ORDERS_PER_PAGE = 15;
 
 export default function OrdersPage() {
   const [orders, setOrders] = React.useState<Order[]>([]);
@@ -21,10 +23,22 @@ export default function OrdersPage() {
   const [isDetailsOpen, setIsDetailsOpen] = React.useState(false);
   const [selectedOrder, setSelectedOrder] = React.useState<Order | null>(null);
   const { toast } = useToast();
+  const [lastVisible, setLastVisible] = React.useState<QueryDocumentSnapshot<DocumentData> | null>(null);
+  const [firstVisible, setFirstVisible] = React.useState<QueryDocumentSnapshot<DocumentData> | null>(null);
+  const [page, setPage] = React.useState(1);
 
+  const fetchOrders = React.useCallback((direction: 'next' | 'prev' | 'initial' = 'initial') => {
+    setLoading(true);
+    
+    let q;
+    if (direction === 'next' && lastVisible) {
+        q = query(collection(firestore, "orders"), orderBy("createdAt", "desc"), startAfter(lastVisible), limit(ORDERS_PER_PAGE));
+    } else if (direction === 'prev' && firstVisible) {
+        q = query(collection(firestore, "orders"), orderBy("createdAt", "desc"), endBefore(firstVisible), limitToLast(ORDERS_PER_PAGE));
+    } else {
+        q = query(collection(firestore, "orders"), orderBy("createdAt", "desc"), limit(ORDERS_PER_PAGE));
+    }
 
-  React.useEffect(() => {
-    const q = query(collection(firestore, "orders"), orderBy("createdAt", "desc"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
         const ordersData: Order[] = [];
         querySnapshot.forEach((doc) => {
@@ -40,6 +54,15 @@ export default function OrdersPage() {
                 paymentMethod: data.paymentMethod
             });
         });
+        
+        if (!querySnapshot.empty) {
+            setLastVisible(querySnapshot.docs[querySnapshot.docs.length - 1]);
+            setFirstVisible(querySnapshot.docs[0]);
+        } else if (direction === 'next') {
+            // Reached the end, disable next button
+            setLastVisible(null);
+        }
+
         setOrders(ordersData);
         setLoading(false);
     }, (error) => {
@@ -48,8 +71,28 @@ export default function OrdersPage() {
         setLoading(false);
     });
 
-    return () => unsubscribe();
-  }, [toast]);
+    return unsubscribe;
+  }, [lastVisible, firstVisible, toast]);
+
+  React.useEffect(() => {
+    const unsubscribe = fetchOrders('initial');
+    return () => unsubscribe && unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleNextPage = () => {
+    if (lastVisible) {
+        setPage(p => p + 1);
+        fetchOrders('next');
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (page > 1) {
+        setPage(p => p - 1);
+        fetchOrders('prev');
+    }
+  };
 
 
   const handleStatusChange = async (orderId: string, newStatus: OrderStatus) => {
@@ -161,6 +204,26 @@ export default function OrdersPage() {
             </TableBody>
           </Table>
         </CardContent>
+         <div className="flex items-center justify-end gap-2 p-4 border-t">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handlePrevPage}
+              disabled={page <= 1}
+            >
+              <ChevronLeft className="h-4 w-4 mr-1" />
+              Previous
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleNextPage}
+              disabled={!lastVisible || orders.length < ORDERS_PER_PAGE}
+            >
+              Next
+              <ChevronRight className="h-4 w-4 ml-1" />
+            </Button>
+          </div>
       </Card>
 
      <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
