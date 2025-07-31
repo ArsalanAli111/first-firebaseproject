@@ -12,7 +12,8 @@ import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import type { Product } from '@/lib/types';
 
-export default function CategoryPage({ params: { slug } }: { params: { slug: string } }) {
+export default function CategoryPage({ params }: { params: { slug: string } }) {
+  const { slug } = params;
   const category = categories.find(c => c.slug === slug);
 
   if (!category) {
@@ -37,7 +38,7 @@ export default function CategoryPage({ params: { slug } }: { params: { slug: str
   const [priceRange, setPriceRange] = React.useState<[number, number]>([0, 250]);
   
   const allBrands = React.useMemo(() => {
-    const brands = initialProducts.map(p => p.brand);
+    const brands = initialProducts.map(p => p.brand).filter(Boolean) as string[];
     return [...new Set(brands)];
   }, [initialProducts]);
 
@@ -60,7 +61,7 @@ export default function CategoryPage({ params: { slug } }: { params: { slug: str
     let newFiltered = initialProducts;
 
     if (selectedBrands.length > 0) {
-      newFiltered = newFiltered.filter(p => selectedBrands.includes(p.brand));
+      newFiltered = newFiltered.filter(p => p.brand && selectedBrands.includes(p.brand));
     }
 
     newFiltered = newFiltered.filter(p => p.price >= priceRange[0] && p.price <= priceRange[1]);
@@ -131,7 +132,7 @@ export default function CategoryPage({ params: { slug } }: { params: { slug: str
               ))}
             </div>
           ) : (
-            <div className="text-center py-16 border rounded-lg">
+             <div className="text-center py-16 border rounded-lg">
                 <h2 className="text-2xl font-semibold mb-2">No Products Found</h2>
                 <p className="text-muted-foreground">There are currently no products available for the selected filters.</p>
             </div>
