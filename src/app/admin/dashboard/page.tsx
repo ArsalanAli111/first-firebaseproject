@@ -24,13 +24,15 @@ export default function AdminDashboardPage() {
     
     const recentProducts = allProducts.slice(-5).reverse();
 
-    const categoryDistribution = allProducts.reduce((acc, product) => {
-        const categoryName = allCategories.find(c => c.slug === product.category)?.name || 'Uncategorized';
-        acc[categoryName] = (acc[categoryName] || 0) + 1;
-        return acc;
-    }, {} as Record<string, number>);
-
-    const pieData = Object.entries(categoryDistribution).map(([name, value]) => ({ name, value }));
+    const categoryDistribution = React.useMemo(() => {
+        const distribution = allProducts.reduce((acc, product) => {
+            const categoryName = allCategories.find(c => c.slug === product.category)?.name || 'Uncategorized';
+            acc[categoryName] = (acc[categoryName] || 0) + 1;
+            return acc;
+        }, {} as Record<string, number>);
+        
+        return Object.entries(distribution).map(([name, value]) => ({ name, value }));
+    }, []);
 
     const getCategoryName = (slug: string) => {
         return allCategories.find(c => c.slug === slug)?.name || 'N/A';
@@ -158,8 +160,8 @@ export default function AdminDashboardPage() {
             <ChartContainer config={{}} className="h-[300px] w-full">
                 <ResponsiveContainer>
                     <PieChart>
-                        <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} label>
-                            {pieData.map((entry, index) => (
+                        <Pie data={categoryDistribution} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} label>
+                            {categoryDistribution.map((entry, index) => (
                                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                             ))}
                         </Pie>
@@ -245,5 +247,3 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
-
-    
