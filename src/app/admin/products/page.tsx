@@ -17,7 +17,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -39,16 +38,18 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { MoreHorizontal, PlusCircle, File } from 'lucide-react';
-import { products as initialProducts, categories } from '@/lib/data';
+import { products as initialProducts, categories, attributes as allAttributes } from '@/lib/data';
 import type { Product } from '@/lib/types';
 import Image from 'next/image';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Badge } from '@/components/ui/badge';
 
 export default function ProductsPage() {
   const [products, setProducts] = React.useState<Product[]>(initialProducts);
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const [editingProduct, setEditingProduct] = React.useState<Product | null>(null);
-
+  
   const handleAddProduct = () => {
     setEditingProduct(null);
     setIsDialogOpen(true);
@@ -69,6 +70,14 @@ export default function ProductsPage() {
       const name = formData.get('name') as string;
       const slug = name.toLowerCase().replace(/\s+/g, '-');
       
+      const newAttributes: Record<string, string> = {};
+      allAttributes.forEach(attr => {
+          const value = formData.get(attr.type.toLowerCase().replace(' ', '-')) as string;
+          if (value) {
+              newAttributes[attr.type] = value;
+          }
+      });
+      
       const newProduct: Product = {
           id: editingProduct ? editingProduct.id : `p${products.length + 1}`,
           name: name,
@@ -77,15 +86,12 @@ export default function ProductsPage() {
           category: formData.get('category') as string,
           stock: parseInt(formData.get('stock') as string),
           imageUrl: editingProduct?.imageUrl || `https://placehold.co/600x600.png`,
-          images: editingProduct?.images || [`https://placehold.co/600x600.png`],
+          images: editingProduct?.images || [],
           dataAiHint: editingProduct?.dataAiHint || 'perfume bottle',
           slug: slug,
           brand: formData.get('brand') as string,
           reviews: editingProduct?.reviews || [],
-          attributes: {
-            'Scent': formData.get('scent') as string,
-            'Size': formData.get('size') as string,
-          },
+          attributes: newAttributes,
       };
 
       if (editingProduct) {
@@ -181,7 +187,7 @@ export default function ProductsPage() {
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogContent className="sm:max-w-[525px]">
+            <DialogContent className="sm:max-w-2xl">
                  <form onSubmit={handleSaveProduct}>
                     <DialogHeader>
                         <DialogTitle>{editingProduct ? 'Edit Product' : 'Add Product'}</DialogTitle>
@@ -189,7 +195,7 @@ export default function ProductsPage() {
                            {editingProduct ? 'Update the details of this product.' : 'Fill out the form to add a new product.'}
                         </DialogDescription>
                     </DialogHeader>
-                    <div className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto pr-6">
+                    <div className="grid gap-6 py-4 max-h-[70vh] overflow-y-auto pr-6">
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="name" className="text-right">Name</Label>
                             <Input id="name" name="name" defaultValue={editingProduct?.name} className="col-span-3" required />
@@ -223,14 +229,22 @@ export default function ProductsPage() {
                             <Label htmlFor="stock" className="text-right">Quantity</Label>
                             <Input id="stock" name="stock" type="number" defaultValue={editingProduct?.stock} className="col-span-3" required />
                         </div>
-                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="scent" className="text-right">Scent</Label>
-                            <Input id="scent" name="scent" defaultValue={editingProduct?.attributes?.Scent} className="col-span-3" />
-                        </div>
-                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="size" className="text-right">Size</Label>
-                            <Input id="size" name="size" defaultValue={editingProduct?.attributes?.Size} className="col-span-3" />
-                        </div>
+                        {allAttributes.map(attr => (
+                            <div key={attr.id} className="grid grid-cols-4 items-center gap-4">
+                                <Label htmlFor={attr.type.toLowerCase().replace(' ', '-')} className="text-right">{attr.type}</Label>
+                                <Select name={attr.type.toLowerCase().replace(' ', '-')} defaultValue={editingProduct?.attributes?.[attr.type] as string | undefined}>
+                                    <SelectTrigger className="col-span-3">
+                                        <SelectValue placeholder={`Select ${attr.type}`} />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {attr.values.map(val => (
+                                            <SelectItem key={val} value={val}>{val}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        ))}
+
                     </div>
                     <DialogFooter>
                         <DialogClose asChild>

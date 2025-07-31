@@ -1,6 +1,7 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { featuredProducts, categories, bestSellers } from "@/lib/data";
+import { products, categories } from "@/lib/data";
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, ShoppingBag } from 'lucide-react';
@@ -8,16 +9,22 @@ import { ProductCard } from "@/components/product-card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 export default function Home() {
+  
+  const featuredProducts = products.filter(p => p.category === 'new-arrivals').slice(0, 8);
+  const bestSellers = products.filter(p => p.category === 'best-sellers').slice(0, 4);
+  const luxuryCollection = products.filter(p => p.category === 'luxury-collection').slice(0, 4);
+  const topCategories = categories.filter(c => ['perfumes-for-men', 'perfumes-for-women', 'unisex-perfumes', 'gift-sets', 'luxury-collection'].includes(c.slug));
+
+
   return (
-    <div className="space-y-16">
+    <div className="space-y-16 pb-16">
       <section className="relative h-[60vh] md:h-[70vh] w-full flex items-center justify-center text-center text-white bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
         <Image 
           src="https://placehold.co/1600x900.png" 
           alt="Perfume bottles"
           data-ai-hint="perfume bottles"
-          layout="fill"
-          objectFit="cover"
-          className="absolute inset-0 z-0 opacity-30"
+          fill
+          className="absolute inset-0 z-0 object-cover opacity-30"
         />
         <div className="relative z-10 bg-black bg-opacity-40 p-8 rounded-lg">
           <h1 className="text-4xl md:text-6xl font-bold font-headline mb-4 tracking-tight">
@@ -34,7 +41,7 @@ export default function Home() {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         <section>
-          <h2 className="text-3xl font-bold text-center mb-8 font-headline">Featured Products</h2>
+          <h2 className="text-3xl font-bold text-center mb-8 font-headline">New Arrivals</h2>
           <Carousel
             opts={{
               align: "start",
@@ -44,8 +51,8 @@ export default function Home() {
           >
             <CarouselContent>
               {featuredProducts.map((product) => (
-                <CarouselItem key={product.id} className="md:basis-1/2 lg:basis-1/3">
-                  <div className="p-1">
+                <CarouselItem key={product.id} className="md:basis-1/2 lg:basis-1/4">
+                  <div className="p-1 h-full">
                     <ProductCard product={product} />
                   </div>
                 </CarouselItem>
@@ -59,7 +66,7 @@ export default function Home() {
         <section>
           <h2 className="text-3xl font-bold text-center mb-8 font-headline">Shop by Category</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-            {categories.map((category) => (
+            {topCategories.map((category) => (
               <Link href={`/category/${category.slug}`} key={category.id} className="group">
                 <Card className="overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                   <CardHeader className="p-0">
@@ -78,6 +85,15 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-center mb-8 font-headline">Our Best Sellers</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {bestSellers.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </section>
+        
+        <section>
+          <h2 className="text-3xl font-bold text-center mb-8 font-headline">The Luxury Collection</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {luxuryCollection.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
