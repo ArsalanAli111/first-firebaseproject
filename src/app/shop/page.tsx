@@ -11,7 +11,7 @@ import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import type { Product } from '@/lib/types';
 
-const PRODUCTS_PER_PAGE = 12;
+const PRODUCTS_PER_PAGE = 9;
 
 export default function ShopPage() {
   const [filteredProducts, setFilteredProducts] = React.useState<Product[]>(allProducts);
