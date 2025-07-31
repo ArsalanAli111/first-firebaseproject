@@ -76,12 +76,16 @@ export default function ProductsPage() {
           price: parseFloat(formData.get('price') as string),
           category: formData.get('category') as string,
           stock: parseInt(formData.get('stock') as string),
-          imageUrl: editingProduct?.imageUrl || `https://placehold.co/600x600.png?text=${encodeURIComponent(name)}`,
-          images: editingProduct?.images || [`https://placehold.co/600x600.png?text=${encodeURIComponent(name)}`],
+          imageUrl: editingProduct?.imageUrl || `https://placehold.co/600x600.png`,
+          images: editingProduct?.images || [`https://placehold.co/600x600.png`],
+          dataAiHint: editingProduct?.dataAiHint || 'perfume bottle',
           slug: slug,
           brand: formData.get('brand') as string,
           reviews: editingProduct?.reviews || [],
-          attributes: {}, // Simplified for now
+          attributes: {
+            'Scent': formData.get('scent') as string,
+            'Size': formData.get('size') as string,
+          },
       };
 
       if (editingProduct) {
@@ -143,6 +147,7 @@ export default function ProductsPage() {
                       height="64"
                       src={product.imageUrl}
                       width="64"
+                      data-ai-hint={product.dataAiHint}
                     />
                   </TableCell>
                   <TableCell className="font-medium">{product.name}</TableCell>
@@ -217,6 +222,14 @@ export default function ProductsPage() {
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="stock" className="text-right">Quantity</Label>
                             <Input id="stock" name="stock" type="number" defaultValue={editingProduct?.stock} className="col-span-3" required />
+                        </div>
+                         <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="scent" className="text-right">Scent</Label>
+                            <Input id="scent" name="scent" defaultValue={editingProduct?.attributes?.Scent} className="col-span-3" />
+                        </div>
+                         <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="size" className="text-right">Size</Label>
+                            <Input id="size" name="size" defaultValue={editingProduct?.attributes?.Size} className="col-span-3" />
                         </div>
                     </div>
                     <DialogFooter>

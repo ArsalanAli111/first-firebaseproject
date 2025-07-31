@@ -1,3 +1,4 @@
+
 export type Product = {
   id: string;
   name: string;
@@ -5,6 +6,7 @@ export type Product = {
   price: number;
   imageUrl: string;
   images: string[];
+  dataAiHint?: string;
   category: string;
   slug: string;
   stock: number;

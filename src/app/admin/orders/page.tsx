@@ -122,7 +122,7 @@ export default function OrdersPage() {
                       const product = products.find(p => p.id === item.id);
                       return (
                          <div key={item.id} className="flex items-start gap-4 py-2 border-b last:border-0">
-                            <Image src={item.imageUrl} alt={item.name} width={40} height={40} className="rounded-md" />
+                            <Image src={item.imageUrl} alt={item.name} width={40} height={40} className="rounded-md" data-ai-hint="perfume bottle" />
                             <div className="flex-grow">
                                 <p className="font-medium text-sm">{item.name}</p>
                                 <p className="text-xs text-muted-foreground">Qty: {item.quantity}</p>

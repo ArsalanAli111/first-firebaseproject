@@ -18,104 +18,104 @@ export const products: Product[] = [
   // Perfumes for Men
   {
     id: 'p1', name: 'Ocean Breeze', description: 'A fresh, aquatic fragrance that captures the essence of a coastal storm.', price: 120.00,
-    imageUrl: 'https://placehold.co/600x600.png?text=Ocean+Breeze', images: ['https://placehold.co/600x600.png?text=Ocean+Breeze'],
+    imageUrl: 'https://placehold.co/600x600.png', dataAiHint: 'perfume bottle', images: ['https://placehold.co/600x600.png'],
     category: 'perfumes-for-men', slug: 'ocean-breeze', stock: 15, brand: 'Aqua Di Mare',
     reviews: [{ rating: 5, text: 'Absolutely invigorating!', author: 'John D.' }], attributes: { 'Scent': 'Aquatic', 'Size': '100ml' },
   },
   {
     id: 'p2', name: 'Forest Floor', description: 'A deep, earthy scent with notes of oakmoss, sandalwood, and vetiver.', price: 135.00,
-    imageUrl: 'https://placehold.co/600x600.png?text=Forest+Floor', images: ['https://placehold.co/600x600.png?text=Forest+Floor'],
+    imageUrl: 'https://placehold.co/600x600.png', dataAiHint: 'perfume bottle', images: ['https://placehold.co/600x600.png'],
     category: 'perfumes-for-men', slug: 'forest-floor', stock: 20, brand: 'Terra Firma',
     reviews: [{ rating: 4, text: 'Very grounding and masculine.', author: 'Mike R.' }], attributes: { 'Scent': 'Woody', 'Size': '100ml' },
   },
   // Perfumes for Women
   {
     id: 'p3', name: 'Velvet Rose', description: 'An elegant and timeless floral scent featuring Bulgarian rose, violet, and a hint of vanilla.', price: 150.00,
-    imageUrl: 'https://placehold.co/600x600.png?text=Velvet+Rose', images: ['https://placehold.co/600x600.png?text=Velvet+Rose'],
+    imageUrl: 'https://placehold.co/600x600.png', dataAiHint: 'perfume bottle', images: ['https://placehold.co/600x600.png'],
     category: 'perfumes-for-women', slug: 'velvet-rose', stock: 20, brand: 'Fleur Chic',
     reviews: [{ rating: 4, text: 'Beautiful and romantic.', author: 'Jane A.' }], attributes: { 'Scent': 'Floral', 'Size': '100ml' },
   },
   {
     id: 'p4', name: 'Citrus Glow', description: 'A vibrant and energetic burst of Sicilian lemon, bergamot, and orange blossom.', price: 110.00,
-    imageUrl: 'https://placehold.co/600x600.png?text=Citrus+Glow', images: ['https://placehold.co/600x600.png?text=Citrus+Glow'],
+    imageUrl: 'https://placehold.co/600x600.png', dataAiHint: 'perfume bottle', images: ['https://placehold.co/600x600.png'],
     category: 'perfumes-for-women', slug: 'citrus-glow', stock: 25, brand: 'Zest & Co.',
     reviews: [{ rating: 5, text: 'My new favorite summer scent!', author: 'Emily R.' }], attributes: { 'Scent': 'Citrus', 'Size': '50ml' },
   },
   // Unisex Perfumes
   {
     id: 'p5', name: 'Noir Enigma', description: 'A complex, spicy-sweet scent with notes of black cardamom, incense, and vanilla.', price: 165.00,
-    imageUrl: 'https://placehold.co/600x600.png?text=Noir+Enigma', images: ['https://placehold.co/600x600.png?text=Noir+Enigma'],
+    imageUrl: 'https://placehold.co/600x600.png', dataAiHint: 'perfume bottle', images: ['https://placehold.co/600x600.png'],
     category: 'unisex-perfumes', slug: 'noir-enigma', stock: 12, brand: 'Obscura',
     reviews: [{ rating: 5, text: 'Truly unique and captivating.', author: 'Alex G.' }], attributes: { 'Scent': 'Oriental', 'Size': '75ml' },
   },
   {
     id: 'p6', name: 'Green Tea & Ginger', description: 'A clean, crisp, and uplifting fragrance perfect for everyday wear.', price: 95.00,
-    imageUrl: 'https://placehold.co/600x600.png?text=Green+Tea', images: ['https://placehold.co/600x600.png?text=Green+Tea'],
+    imageUrl: 'https://placehold.co/600x600.png', dataAiHint: 'perfume bottle', images: ['https://placehold.co/600x600.png'],
     category: 'unisex-perfumes', slug: 'green-tea-ginger', stock: 30, brand: 'Zen Garden',
     reviews: [{ rating: 4, text: 'So refreshing and light.', author: 'Sam T.' }], attributes: { 'Scent': 'Aromatic', 'Size': '100ml' },
   },
   // Gift Sets
   {
     id: 'p7', name: 'His & Hers Duo', description: 'A perfect pairing of our best-selling men\'s and women\'s fragrances.', price: 220.00,
-    imageUrl: 'https://placehold.co/600x600.png?text=His+Hers+Duo', images: ['https://placehold.co/600x600.png?text=His+Hers+Duo'],
+    imageUrl: 'https://placehold.co/600x600.png', dataAiHint: 'gift set', images: ['https://placehold.co/600x600.png'],
     category: 'gift-sets', slug: 'his-hers-duo', stock: 15, brand: 'Scent Sample',
     reviews: [], attributes: { 'Contains': '2x50ml Bottles' },
   },
   {
     id: 'p8', name: 'Luxury Gift Box', description: 'The ultimate gift. Contains a full-size bottle, travel spray, and scented candle.', price: 250.00,
-    imageUrl: 'https://placehold.co/600x600.png?text=Luxury+Gift+Box', images: ['https://placehold.co/600x600.png?text=Luxury+Gift+Box'],
+    imageUrl: 'https://placehold.co/600x600.png', dataAiHint: 'gift box', images: ['https://placehold.co/600x600.png'],
     category: 'gift-sets', slug: 'luxury-gift-box', stock: 10, brand: 'Scent Sample',
     reviews: [{ rating: 5, text: 'Stunning presentation.', author: 'Sophia L.' }], attributes: { 'Contents': '3 items' },
   },
   // Tester Perfumes
   {
     id: 'p9', name: 'Discovery Tester Set', description: 'Explore our five most popular fragrances with this discovery set.', price: 40.00,
-    imageUrl: 'https://placehold.co/600x600.png?text=Discovery+Set', images: ['https://placehold.co/600x600.png?text=Discovery+Set'],
+    imageUrl: 'https://placehold.co/600x600.png', dataAiHint: 'perfume samples', images: ['https://placehold.co/600x600.png'],
     category: 'tester-perfumes', slug: 'discovery-tester-set', stock: 50, brand: 'Scent Sample',
     reviews: [{ rating: 5, text: 'Great way to find a favorite.', author: 'Chris P.' }], attributes: { 'Size': '5x2ml' },
   },
   {
     id: 'p10', name: 'Floral Notes Sampler', description: 'A curated selection of our finest floral perfumes for women.', price: 45.00,
-    imageUrl: 'https://placehold.co/600x600.png?text=Floral+Sampler', images: ['https://placehold.co/600x600.png?text=Floral+Sampler'],
+    imageUrl: 'https://placehold.co/600x600.png', dataAiHint: 'perfume samples', images: ['https://placehold.co/600x600.png'],
     category: 'tester-perfumes', slug: 'floral-notes-sampler', stock: 35, brand: 'Scent Sample',
     reviews: [], attributes: { 'Size': '5x2ml' },
   },
   // Luxury Collection
   {
     id: 'p11', name: 'Midnight Oud', description: 'A mysterious and smoky blend of rare oud, incense, and black pepper.', price: 180.00,
-    imageUrl: 'https://placehold.co/600x600.png?text=Midnight+Oud', images: ['https://placehold.co/600x600.png?text=Midnight+Oud'],
+    imageUrl: 'https://placehold.co/600x600.png', dataAiHint: 'perfume bottle', images: ['https://placehold.co/600x600.png'],
     category: 'luxury-collection', slug: 'midnight-oud', stock: 8, brand: 'Arabian Nights',
     reviews: [{ rating: 5, text: 'Powerful and long-lasting.', author: 'Mark S.' }], attributes: { 'Scent': 'Smoky', 'Size': '50ml' },
   },
   {
     id: 'p12', name: 'Imperial Amber', description: 'A rich and opulent fragrance with golden amber, saffron, and aged leather.', price: 275.00,
-    imageUrl: 'https://placehold.co/600x600.png?text=Imperial+Amber', images: ['https://placehold.co/600x600.png?text=Imperial+Amber'],
+    imageUrl: 'https://placehold.co/600x600.png', dataAiHint: 'perfume bottle', images: ['https://placehold.co/600x600.png'],
     category: 'luxury-collection', slug: 'imperial-amber', stock: 5, brand: 'Royal Scents',
     reviews: [], attributes: { 'Scent': 'Amber', 'Size': '100ml' },
   },
   // Best Sellers
   {
     id: 'p13', name: 'Ember & Spice', description: 'A warm scent with cinnamon, clove, and amber. Ideal for cozy nights.', price: 135.00,
-    imageUrl: 'https://placehold.co/600x600.png?text=Ember+Spice', images: ['https://placehold.co/600x600.png?text=Ember+Spice'],
+    imageUrl: 'https://placehold.co/600x600.png', dataAiHint: 'perfume bottle', images: ['https://placehold.co/600x600.png'],
     category: 'best-sellers', slug: 'ember-spice', stock: 18, brand: 'Arabian Nights',
     reviews: [{ rating: 5, text: 'Feels like a warm hug.', author: 'David C.' }], attributes: { 'Scent': 'Spicy', 'Size': '100ml' },
   },
   {
     id: 'p14', name: 'Solar Musk', description: 'A clean and radiant musk fragrance, enhanced with white jasmine and ambrette.', price: 145.00,
-    imageUrl: 'https://placehold.co/600x600.png?text=Solar+Musk', images: ['https://placehold.co/600x600.png?text=Solar+Musk'],
+    imageUrl: 'https://placehold.co/600x600.png', dataAiHint: 'perfume bottle', images: ['https://placehold.co/600x600.png'],
     category: 'best-sellers', slug: 'solar-musk', stock: 22, brand: 'Fleur Chic',
     reviews: [{ rating: 4, text: 'Subtle yet very sophisticated.', author: 'Olivia W.' }], attributes: { 'Scent': 'Musk', 'Size': '50ml' },
   },
   // New Arrivals
   {
     id: 'p15', name: 'Aqua Vitae', description: 'A modern marine fragrance with notes of grapefruit, sea minerals, and cedar.', price: 125.00,
-    imageUrl: 'https://placehold.co/600x600.png?text=Aqua+Vitae', images: ['https://placehold.co/600x600.png?text=Aqua+Vitae'],
+    imageUrl: 'https://placehold.co/600x600.png', dataAiHint: 'perfume bottle', images: ['https://placehold.co/600x600.png'],
     category: 'new-arrivals', slug: 'aqua-vitae', stock: 25, brand: 'Aqua Di Mare',
     reviews: [], attributes: { 'Scent': 'Marine', 'Size': '100ml' },
   },
   {
     id: 'p16', name: 'Petal Haze', description: 'A dreamy, soft floral with peony, lychee, and white musk.', price: 155.00,
-    imageUrl: 'https://placehold.co/600x600.png?text=Petal+Haze', images: ['https://placehold.co/600x600.png?text=Petal+Haze'],
+    imageUrl: 'https://placehold.co/600x600.png', dataAiHint: 'perfume bottle', images: ['https://placehold.co/600x600.png'],
     category: 'new-arrivals', slug: 'petal-haze', stock: 18, brand: 'Fleur Chic',
     reviews: [], attributes: { 'Scent': 'Floral', 'Size': '75ml' },
   }
@@ -123,7 +123,7 @@ export const products: Product[] = [
 
 
 export const featuredProducts = products.slice(0, 4);
-export const bestSellers = products.filter(p => p.category === 'best-sellers');
+export const bestSellers = products.filter(p => ['p13', 'p3', 'p1', 'p5'].includes(p.id));
 
 export const sampleOrders: Order[] = [
     {
@@ -213,7 +213,7 @@ export const attributes: Attribute[] = [
   {
     id: 'attr2',
     type: 'Size',
-    values: ['30ml', '50ml', '100ml'],
+    values: ['30ml', '50ml', '75ml', '100ml'],
   },
   {
     id: 'attr3',
