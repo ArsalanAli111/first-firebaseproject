@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -12,7 +11,8 @@ import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import type { Product } from '@/lib/types';
 
-export default function CategoryPage({ params: { slug } }: { params: { slug: string } }) {
+export default function CategoryPage({ params }: { params: { slug: string } }) {
+  const { slug } = params;
   const category = categories.find(c => c.slug === slug);
 
   if (!category) {
@@ -67,6 +67,10 @@ export default function CategoryPage({ params: { slug } }: { params: { slug: str
 
     setFilteredProducts(newFiltered);
   }, [selectedBrands, priceRange, initialProducts]);
+
+  React.useEffect(() => {
+    setFilteredProducts(initialProducts);
+  }, [initialProducts]);
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -133,7 +137,7 @@ export default function CategoryPage({ params: { slug } }: { params: { slug: str
           ) : (
              <div className="text-center py-16 border rounded-lg">
                 <h2 className="text-2xl font-semibold mb-2">No Products Found</h2>
-                <p className="text-muted-foreground">There are currently no products available for the selected filters.</p>
+                <p className="text-muted-foreground">There are currently no products available in this category.</p>
             </div>
           )}
         </main>
