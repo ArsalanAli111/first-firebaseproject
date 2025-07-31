@@ -49,6 +49,7 @@ export type CustomerInfo = {
   city: string;
   state: string;
   postalCode: string;
+  country: string;
 };
 
 export type Order = {

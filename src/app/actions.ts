@@ -43,9 +43,11 @@ export async function createOrder(orderData: {
 }) {
     try {
         const orderToCreate = {
-            ...orderData,
-            date: new Date().toISOString().split('T')[0],
-            status: 'Pending', // Default status
+            customer: orderData.customer,
+            items: orderData.items,
+            total: orderData.total,
+            paymentMethod: orderData.paymentMethod,
+            status: 'Pending',
             createdAt: serverTimestamp()
         };
         const orderRef = await addDoc(collection(firestore, 'orders'), orderToCreate);
@@ -69,7 +71,7 @@ export async function getOrderById(orderId: string): Promise<Order | null> {
         const data = orderSnap.data();
         return {
             id: orderSnap.id,
-            date: (data.createdAt as Timestamp)?.toDate().toLocaleDateString() || new Date(data.date).toLocaleDateString(),
+            date: (data.createdAt as Timestamp)?.toDate().toLocaleDateString() || new Date().toLocaleDateString(),
             status: data.status,
             customer: data.customer,
             total: data.total,

@@ -51,18 +51,23 @@ export default function CheckoutPage() {
                 city: formData.get('city') as string,
                 state: formData.get('state') as string,
                 postalCode: formData.get('zip') as string,
+                country: formData.get('country') as string,
             },
             items: orderItems,
             total: totalPrice,
             paymentMethod: paymentMethod,
         });
 
-        toast({
-            title: "Order Placed Successfully!",
-            description: "Thank you for your purchase. We've received your order.",
-        });
-        clearCart();
-        router.push(`/order-confirmation/${result.orderId}`);
+        if (result.success) {
+            toast({
+                title: "Order Placed Successfully!",
+                description: "Thank you for your purchase. We've received your order.",
+            });
+            clearCart();
+            router.push(`/order-confirmation/${result.orderId}`);
+        } else {
+            throw new Error("Order creation failed.");
+        }
     } catch (error) {
         console.error("Failed to create order:", error);
         toast({
@@ -124,6 +129,10 @@ export default function CheckoutPage() {
                     <Label htmlFor="zip">ZIP Code</Label>
                     <Input id="zip" name="zip" placeholder="12345" required />
                   </div>
+                </div>
+                 <div className="space-y-2">
+                    <Label htmlFor="country">Country</Label>
+                    <Input id="country" name="country" placeholder="USA" required />
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
