@@ -15,7 +15,7 @@ export default function ShopPage() {
   const [products, setProducts] = React.useState<Product[]>(allProducts);
   const [selectedCategories, setSelectedCategories] = React.useState<string[]>([]);
   const [selectedBrands, setSelectedBrands] = React.useState<string[]>([]);
-  const [priceRange, setPriceRange] = React.useState<[number, number]>([0, 250]);
+  const [priceRange, setPriceRange] = React.useState<[number, number]>([0, 300]);
   
   const allBrands = React.useMemo(() => {
     const brands = allProducts.map(p => p.brand);
@@ -41,7 +41,7 @@ export default function ShopPage() {
   const clearFilters = () => {
     setSelectedCategories([]);
     setSelectedBrands([]);
-    setPriceRange([0, 250]);
+    setPriceRange([0, 300]);
   }
 
   React.useEffect(() => {
@@ -69,59 +69,61 @@ export default function ShopPage() {
       
       <div className="flex flex-col md:flex-row gap-8">
         <aside className="w-full md:w-1/4 lg:w-1/5">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold font-headline flex items-center">
-              <Filter className="mr-2 h-5 w-5"/>
-              Filters
-            </h2>
-            <Button variant="ghost" size="sm" onClick={clearFilters} className="text-sm">
-                <X className="mr-1 h-4 w-4" />
-                Clear
-            </Button>
-          </div>
-          
-          <div className="space-y-6">
-            <div>
-              <h3 className="font-semibold mb-3">Category</h3>
-              <div className="space-y-2">
-                {categories.map(category => (
-                  <div key={category.id} className="flex items-center space-x-2">
-                    <Checkbox 
-                      id={`cat-${category.id}`} 
-                      checked={selectedCategories.includes(category.slug)}
-                      onCheckedChange={() => handleCategoryChange(category.slug)}
-                    />
-                    <Label htmlFor={`cat-${category.id}`} className="font-normal cursor-pointer">{category.name}</Label>
-                  </div>
-                ))}
-              </div>
+          <div className="sticky top-24">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold font-headline flex items-center">
+                <Filter className="mr-2 h-5 w-5"/>
+                Filters
+              </h2>
+              <Button variant="ghost" size="sm" onClick={clearFilters} className="text-sm">
+                  <X className="mr-1 h-4 w-4" />
+                  Clear
+              </Button>
             </div>
-             <div>
-              <h3 className="font-semibold mb-3">Price Range</h3>
-              <Slider
-                value={priceRange}
-                onValueChange={handlePriceChange}
-                max={250}
-                step={10}
-              />
-              <div className="flex justify-between text-sm text-muted-foreground mt-2">
-                <span>${priceRange[0]}</span>
-                <span>${priceRange[1]}</span>
+            
+            <div className="space-y-6">
+              <div>
+                <h3 className="font-semibold mb-3">Category</h3>
+                <div className="space-y-2">
+                  {categories.map(category => (
+                    <div key={category.id} className="flex items-center space-x-2">
+                      <Checkbox 
+                        id={`cat-${category.id}`} 
+                        checked={selectedCategories.includes(category.slug)}
+                        onCheckedChange={() => handleCategoryChange(category.slug)}
+                      />
+                      <Label htmlFor={`cat-${category.id}`} className="font-normal cursor-pointer">{category.name}</Label>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-             <div>
-              <h3 className="font-semibold mb-3">Brand</h3>
-              <div className="space-y-2">
-                {allBrands.map(brand => (
-                   <div key={brand} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={`brand-${brand}`}
-                      checked={selectedBrands.includes(brand)}
-                      onCheckedChange={() => handleBrandChange(brand)}
-                    />
-                    <Label htmlFor={`brand-${brand}`} className="font-normal cursor-pointer">{brand}</Label>
-                  </div>
-                ))}
+               <div>
+                <h3 className="font-semibold mb-3">Price Range</h3>
+                <Slider
+                  value={priceRange}
+                  onValueChange={handlePriceChange}
+                  max={300}
+                  step={10}
+                />
+                <div className="flex justify-between text-sm text-muted-foreground mt-2">
+                  <span>${priceRange[0]}</span>
+                  <span>${priceRange[1]}</span>
+                </div>
+              </div>
+               <div>
+                <h3 className="font-semibold mb-3">Brand</h3>
+                <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
+                  {allBrands.map(brand => (
+                     <div key={brand} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`brand-${brand}`}
+                        checked={selectedBrands.includes(brand)}
+                        onCheckedChange={() => handleBrandChange(brand)}
+                      />
+                      <Label htmlFor={`brand-${brand}`} className="font-normal cursor-pointer">{brand}</Label>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

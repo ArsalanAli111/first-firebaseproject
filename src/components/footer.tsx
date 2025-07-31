@@ -25,6 +25,11 @@ export function Footer() {
           <div className="md:col-span-1">
             <h4 className="font-semibold font-headline">Shop</h4>
             <ul className="mt-4 space-y-2 text-sm">
+               <li>
+                  <Link href="/shop" className="hover:text-accent transition-colors">
+                    All Products
+                  </Link>
+                </li>
               {categories.slice(0, 4).map(category => (
                 <li key={category.id}>
                   <Link href={`/category/${category.slug}`} className="hover:text-accent transition-colors">
