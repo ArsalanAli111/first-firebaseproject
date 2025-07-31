@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { products, categories } from "@/lib/data";
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, ShoppingBag } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { ProductCard } from "@/components/product-card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { NewsletterSignup } from "@/components/newsletter-signup";

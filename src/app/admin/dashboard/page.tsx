@@ -2,7 +2,7 @@
 'use client'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart as BarChartIcon, Box, DollarSign, Package, ShoppingCart, Tags, Users } from "lucide-react";
+import { Box, DollarSign, Package, ShoppingCart, Tags, Users } from "lucide-react";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Pie, Cell, PieChart } from "recharts";
 import { sampleOrders, products as allProducts, attributes as allAttributes, categories as allCategories, users } from "@/lib/data";
