@@ -1,4 +1,6 @@
 
+import { Timestamp } from "firebase/firestore";
+
 export type Product = {
   id: string;
   name: string;
@@ -36,14 +38,19 @@ export type CartItem = {
   imageUrl: string;
 };
 
+export type OrderItem = Omit<CartItem, 'quantity'> & { quantity: number };
+
+export type OrderStatus = 'Pending' | 'Shipped' | 'Delivered' | 'Cancelled';
+
 export type Order = {
   id: string;
   date: string;
-  status: 'Pending' | 'Shipped' | 'Delivered';
+  status: OrderStatus;
   total: number;
   customer: {
     name: string;
     email: string;
   };
-  items: Omit<CartItem, 'quantity'> & { quantity: number }[];
+  items: OrderItem[];
+  createdAt?: Timestamp;
 };

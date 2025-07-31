@@ -1,8 +1,11 @@
+
 'use server';
 
 import { generateProductRecommendations } from '@/ai/flows/product-recommendations';
 import { products } from '@/lib/data';
-import type { Product } from '@/lib/types';
+import type { Product, Order, OrderItem } from '@/lib/types';
+import { firestore } from '@/lib/firebase';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 
 export async function getRecommendedProducts(viewingHistory: string[]): Promise<Product[]> {
   try {
@@ -30,4 +33,19 @@ export async function getRecommendedProducts(viewingHistory: string[]): Promise<
     // Return a default set of products on error
     return products.slice(0, 4).filter(p => !viewingHistory.includes(p.id));
   }
+}
+
+export async function createOrder(orderData: Omit<Order, 'id' | 'date' | 'status'>) {
+    try {
+        const orderRef = await addDoc(collection(firestore, 'orders'), {
+            ...orderData,
+            date: new Date().toISOString().split('T')[0],
+            status: 'Pending', // Default status
+            createdAt: serverTimestamp()
+        });
+        return { success: true, orderId: orderRef.id };
+    } catch (error) {
+        console.error("Error creating order in Firestore:", error);
+        throw new Error("Could not create order.");
+    }
 }

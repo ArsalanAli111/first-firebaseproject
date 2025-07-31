@@ -1,5 +1,7 @@
+
 'use client';
 
+import * as React from 'react';
 import { useCart } from '@/hooks/use-cart';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,61 +9,117 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
+import { createOrder } from '@/app/actions';
+import type { OrderItem } from '@/lib/types';
+import { Loader2 } from 'lucide-react';
 
 export default function CheckoutPage() {
   const { cartItems, totalPrice, clearCart } = useCart();
   const router = useRouter();
+  const { toast } = useToast();
+  const [loading, setLoading] = React.useState(false);
 
-  const handlePlaceOrder = (e: React.FormEvent) => {
+  const handlePlaceOrder = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // In a real app, you would process the payment here.
-    alert('Order placed successfully! (Simulation)');
-    clearCart();
-    router.push('/');
+    setLoading(true);
+
+    if (cartItems.length === 0) {
+        toast({ title: "Your cart is empty", variant: "destructive" });
+        setLoading(false);
+        return;
+    }
+
+    const formData = new FormData(e.currentTarget);
+    const orderItems: OrderItem[] = cartItems.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        imageUrl: item.imageUrl
+    }));
+
+    try {
+        await createOrder({
+            customer: {
+                name: `${formData.get('firstName')} ${formData.get('lastName')}`,
+                email: formData.get('email') as string,
+            },
+            items: orderItems,
+            total: totalPrice
+        });
+
+        toast({
+            title: "Order Placed Successfully!",
+            description: "Thank you for your purchase. We've received your order.",
+        });
+        clearCart();
+        router.push('/account');
+    } catch (error) {
+        console.error("Failed to create order:", error);
+        toast({
+            title: "Failed to place order",
+            description: "Something went wrong. Please try again.",
+            variant: "destructive",
+        });
+    } finally {
+        setLoading(false);
+    }
   };
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <h1 className="text-4xl font-bold font-headline mb-8 text-center">Checkout</h1>
+       {cartItems.length === 0 ? (
+        <Card className="text-center p-8">
+            <CardTitle>Your cart is empty</CardTitle>
+            <CardContent className="mt-4">
+                <p>You need to add items to your cart before you can checkout.</p>
+                <Button onClick={() => router.push('/shop')} className="mt-4">
+                    Continue Shopping
+                </Button>
+            </CardContent>
+        </Card>
+      ) : (
       <div className="grid lg:grid-cols-2 gap-12">
         <div>
           <Card>
             <CardHeader>
-              <CardTitle className="font-headline">Shipping Information</CardTitle>
+              <CardTitle className="font-headline">Shipping & Payment</CardTitle>
             </CardHeader>
             <CardContent>
               <form onSubmit={handlePlaceOrder} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="firstName">First Name</Label>
-                    <Input id="firstName" placeholder="John" required />
+                    <Input id="firstName" name="firstName" placeholder="John" required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="lastName">Last Name</Label>
-                    <Input id="lastName" placeholder="Doe" required />
+                    <Input id="lastName" name="lastName" placeholder="Doe" required />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="address">Address</Label>
-                  <Input id="address" placeholder="123 Main St" required />
+                  <Input id="address" name="address" placeholder="123 Main St" required />
                 </div>
                  <div className="space-y-2">
                   <Label htmlFor="city">City</Label>
-                  <Input id="city" placeholder="Anytown" required />
+                  <Input id="city" name="city" placeholder="Anytown" required />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="state">State</Label>
-                    <Input id="state" placeholder="CA" required />
+                    <Input id="state" name="state" placeholder="CA" required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="zip">ZIP Code</Label>
-                    <Input id="zip" placeholder="12345" required />
+                    <Input id="zip" name="zip" placeholder="12345" required />
                   </div>
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" placeholder="you@example.com" required />
+                    <Input id="email" type="email" name="email" placeholder="you@example.com" required />
                 </div>
 
                 <h3 className="text-xl font-headline pt-4">Payment Details</h3>
@@ -80,8 +138,9 @@ export default function CheckoutPage() {
                   </div>
                 </div>
                 
-                <Button type="submit" size="lg" className="w-full mt-6 bg-accent hover:bg-accent/90">
-                  Place Order
+                <Button type="submit" size="lg" className="w-full mt-6 bg-accent hover:bg-accent/90" disabled={loading}>
+                  {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {loading ? 'Placing Order...' : 'Place Order'}
                 </Button>
               </form>
             </CardContent>
@@ -125,6 +184,7 @@ export default function CheckoutPage() {
           </Card>
         </div>
       </div>
+      )}
     </div>
   );
 }
