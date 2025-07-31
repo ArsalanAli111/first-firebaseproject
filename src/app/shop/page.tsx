@@ -4,23 +4,37 @@
 import * as React from 'react';
 import { ProductCard } from '@/components/product-card';
 import { products as allProducts, categories } from '@/lib/data';
-import { Filter, X } from 'lucide-react';
+import { Filter, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import type { Product } from '@/lib/types';
 
+const PRODUCTS_PER_PAGE = 12;
+
 export default function ShopPage() {
-  const [products, setProducts] = React.useState<Product[]>(allProducts);
+  const [filteredProducts, setFilteredProducts] = React.useState<Product[]>(allProducts);
   const [selectedCategories, setSelectedCategories] = React.useState<string[]>([]);
   const [selectedBrands, setSelectedBrands] = React.useState<string[]>([]);
   const [priceRange, setPriceRange] = React.useState<[number, number]>([0, 300]);
+  const [currentPage, setCurrentPage] = React.useState(1);
   
   const allBrands = React.useMemo(() => {
     const brands = allProducts.map(p => p.brand);
     return [...new Set(brands)];
   }, []);
+
+  const totalPages = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
+  const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
+  const endIndex = startIndex + PRODUCTS_PER_PAGE;
+  const currentProducts = filteredProducts.slice(startIndex, endIndex);
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
 
   const handleCategoryChange = (slug: string) => {
     setSelectedCategories(prev =>
@@ -57,7 +71,8 @@ export default function ShopPage() {
 
     filtered = filtered.filter(p => p.price >= priceRange[0] && p.price <= priceRange[1]);
 
-    setProducts(filtered);
+    setFilteredProducts(filtered);
+    setCurrentPage(1); // Reset to first page on filter change
   }, [selectedCategories, selectedBrands, priceRange]);
 
   return (
@@ -131,14 +146,37 @@ export default function ShopPage() {
 
         <main className="w-full md:w-3/4 lg:w-4/5">
           <div className="mb-4 text-sm text-muted-foreground">
-            Showing {products.length} of {allProducts.length} products
+            Showing {currentProducts.length} of {filteredProducts.length} products
           </div>
-          {products.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {products.map(product => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
+          {currentProducts.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {currentProducts.map(product => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+              <div className="flex justify-center items-center gap-4 mt-8">
+                  <Button 
+                      variant="outline" 
+                      size="icon" 
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                  >
+                      <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <span className="text-sm">
+                    Page {currentPage} of {totalPages}
+                  </span>
+                  <Button 
+                      variant="outline" 
+                      size="icon" 
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                  >
+                      <ChevronRight className="h-4 w-4" />
+                  </Button>
+              </div>
+            </>
           ) : (
             <div className="text-center py-16 border rounded-lg">
                 <h2 className="text-2xl font-semibold mb-2">No Products Found</h2>
