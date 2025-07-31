@@ -9,7 +9,7 @@ export default function ShippingPolicyPage() {
         </CardHeader>
         <CardContent className="prose prose-lg max-w-none text-muted-foreground prose-headings:font-headline prose-headings:text-foreground">
           <p>
-            At Scent Sample, we are committed to delivering your new fragrances promptly and securely. Please review our shipping policy below for details on how we handle and dispatch your orders.
+            At Oud Mystique, we are committed to delivering your new fragrances promptly and securely. Please review our shipping policy below for details on how we handle and dispatch your orders.
           </p>
           
           <h3>Order Processing</h3>
@@ -27,7 +27,7 @@ export default function ShippingPolicyPage() {
 
           <h3>International Shipping</h3>
           <p>
-            We offer international shipping to most countries. Shipping charges for your order will be calculated and displayed at checkout. Your order may be subject to import duties and taxes (including VAT), which are incurred once a shipment reaches your destination country. Scent Sample is not responsible for these charges if they are applied.
+            We offer international shipping to most countries. Shipping charges for your order will be calculated and displayed at checkout. Your order may be subject to import duties and taxes (including VAT), which are incurred once a shipment reaches your destination country. Oud Mystique is not responsible for these charges if they are applied.
           </p>
 
           <h3>How do I check the status of my order?</h3>
@@ -36,7 +36,7 @@ export default function ShippingPolicyPage() {
           </p>
 
           <p>
-            If you have any further questions, please don't hesitate to contact us at support@scentsample.com.
+            If you have any further questions, please don't hesitate to contact us at support@oudmystique.com.
           </p>
         </CardContent>
       </Card>
