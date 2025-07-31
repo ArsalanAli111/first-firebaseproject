@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { LineChart, Line, BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from "recharts";
-import { salesData, newCustomersData, products } from "@/lib/data";
+import { newCustomersData, products, sampleOrders } from "@/lib/data";
 import { FileDown } from "lucide-react";
 import type { Product } from '@/lib/types';
 
@@ -18,6 +18,32 @@ type TopSellingProduct = Product & {
 
 export default function ReportsPage() {
   const [topSellingProducts, setTopSellingProducts] = React.useState<TopSellingProduct[]>([]);
+  
+  const salesData = React.useMemo(() => {
+    const salesByMonth: Record<string, { sales: number }> = {};
+    sampleOrders.forEach(order => {
+        const date = new Date(order.date);
+        const month = date.toLocaleString('default', { month: 'short' });
+        salesByMonth[month] = {
+            sales: (salesByMonth[month]?.sales || 0) + order.total,
+        };
+    });
+
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const currentMonth = new Date().getMonth();
+    const lastSixMonths: { name: string; sales: number }[] = [];
+
+    for (let i = 5; i >= 0; i--) {
+        const monthIndex = (currentMonth - i + 12) % 12;
+        const monthName = monthNames[monthIndex];
+        lastSixMonths.push({
+            name: monthName,
+            sales: salesByMonth[monthName]?.sales || 0,
+        });
+    }
+    
+    return lastSixMonths;
+  }, []);
 
   React.useEffect(() => {
     // Calculate top selling products from sample data on the client side
