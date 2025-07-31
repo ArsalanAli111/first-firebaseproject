@@ -104,6 +104,7 @@ export default function AdminDashboardPage() {
             <p className="text-xs text-muted-foreground">Live product count</p>
           </CardContent>
         </Card>
+        <Link href="/admin/customers" className="block transition-all hover:shadow-lg hover:-translate-y-0.5">
          <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Customers</CardTitle>
@@ -114,6 +115,7 @@ export default function AdminDashboardPage() {
             <p className="text-xs text-muted-foreground">Registered customer count</p>
           </CardContent>
         </Card>
+        </Link>
          <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Categories</CardTitle>
