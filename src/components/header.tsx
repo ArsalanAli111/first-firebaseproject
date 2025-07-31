@@ -15,12 +15,12 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Logo } from "./logo";
-import { categories } from "@/lib/data";
 
-const navLinks = categories.map(c => ({
-    href: `/category/${c.slug}`,
-    label: c.name
-}));
+const navLinks = [
+    { href: "/shop", label: "Shop" },
+    { href: "/about", label: "About" },
+    { href: "/contact", label: "Contact" },
+];
 
 export function Header() {
   const { cartCount } = useCart();

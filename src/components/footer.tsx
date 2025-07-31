@@ -5,12 +5,13 @@ import { Button } from './ui/button';
 import { Logo } from "./logo";
 import { categories } from "@/lib/data";
 
-const staticLinks = [
+const infoLinks = [
+  { href: "/about", label: "About Us" },
+  { href: "/contact", label: "Contact Us" },
   { href: "/shipping-policy", label: "Shipping Policy" },
   { href: "/refund-policy", label: "Refund Policy" },
   { href: "/privacy-policy", label: "Privacy Policy" },
   { href: "/terms-of-service", label: "Terms of Service" },
-  { href: "/contact", label: "Contact Us" },
 ];
 
 export function Footer() {
@@ -21,14 +22,14 @@ export function Footer() {
 
   return (
     <footer className="bg-secondary text-secondary-foreground">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           
-          <div className="md:col-span-4">
+          <div className="flex flex-col">
             <Link href="/" className="inline-block mb-4">
               <Logo className="h-10 w-auto" />
             </Link>
-            <p className="mt-2 text-sm text-muted-foreground max-w-sm">Discover your signature scent with our curated collection of luxury perfumes.</p>
+            <p className="text-sm text-muted-foreground max-w-sm">Discover your signature scent with our curated collection of luxury perfumes.</p>
              <div className="mt-6 flex space-x-2">
               <Button variant="ghost" size="icon" asChild>
                 <a href="#" aria-label="Facebook"><Facebook className="h-5 w-5 text-muted-foreground" /></a>
@@ -42,10 +43,15 @@ export function Footer() {
             </div>
           </div>
           
-          <div className="md:col-span-4">
-            <h4 className="font-semibold font-headline">Categories</h4>
-            <ul className="mt-4 space-y-2 text-sm columns-2">
-              {categoryLinks.map(link => (
+          <div>
+            <h4 className="font-semibold font-headline">Shop</h4>
+            <ul className="mt-4 space-y-2 text-sm">
+              <li>
+                <Link href="/shop" className="text-muted-foreground hover:text-primary transition-colors">
+                  All Products
+                </Link>
+              </li>
+              {categoryLinks.slice(0, 5).map(link => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-muted-foreground hover:text-primary transition-colors">
                     {link.label}
@@ -55,10 +61,23 @@ export function Footer() {
             </ul>
           </div>
 
-          <div className="md:col-span-4">
+          <div>
+             <h4 className="font-semibold font-headline text-secondary">‎</h4>
+            <ul className="mt-4 space-y-2 text-sm">
+              {categoryLinks.slice(5).map(link => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-muted-foreground hover:text-primary transition-colors">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
             <h4 className="font-semibold font-headline">Information</h4>
             <ul className="mt-4 space-y-2 text-sm">
-              {staticLinks.map(link => (
+              {infoLinks.map(link => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-muted-foreground hover:text-primary transition-colors">
                     {link.label}
