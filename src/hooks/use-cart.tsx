@@ -1,3 +1,4 @@
+
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
@@ -47,7 +48,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
           i.id === item.id ? { ...i, quantity: i.quantity + item.quantity } : i
         );
       }
-      return [...prevItems, { ...item, quantity: item.quantity }];
+      return [...prevItems, item];
     });
     toast({
       title: "Added to cart",
