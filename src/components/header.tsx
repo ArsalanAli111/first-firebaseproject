@@ -2,13 +2,13 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingBag, User, Menu, LayoutDashboard, Edit, LogOut, UserCircle, ChevronDown } from 'lucide-react';
+import { ShoppingBag, User, Menu, LayoutDashboard, Edit, LogOut, UserCircle } from 'lucide-react';
 import { Button } from "./ui/button";
 import { useCart } from "@/hooks/use-cart";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent, DropdownMenuPortal } from "./ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useRouter } from "next/navigation";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogClose } from "./ui/dialog";
@@ -51,30 +51,11 @@ export function Header() {
               <Logo className="h-10 w-auto" />
             </Link>
             <nav className="hidden md:flex items-center gap-4 text-sm font-medium">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="flex items-center gap-1 transition-colors hover:text-accent px-0">
-                    Shop <ChevronDown className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem asChild>
-                     <Link href="/shop">All Products</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  {mainCategories.map(category => (
-                     <DropdownMenuItem key={category.id} asChild>
-                       <Link href={`/category/${category.slug}`}>{category.name}</Link>
-                     </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              {navLinks.map(link => (
-                <Link key={link.href} href={link.href} className="transition-colors hover:text-accent">
-                  {link.label}
+               {mainCategories.map(category => (
+                <Link key={category.id} href={`/category/${category.slug}`} className="transition-colors hover:text-accent">
+                    {category.name}
                 </Link>
-              ))}
+                ))}
               {isAdmin && isAuthenticated && (
                 <Link href="/admin/dashboard" className="transition-colors hover:text-accent font-semibold text-primary">
                   Dashboard
