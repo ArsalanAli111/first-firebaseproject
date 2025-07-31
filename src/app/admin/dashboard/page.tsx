@@ -5,29 +5,37 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { BarChart as BarChartIcon, Box, FileBarChart, LineChart as LineChartIcon, Package, PieChart as PieChartIcon, ShoppingCart, Tags, Users } from "lucide-react";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Bar, BarChart, Line, LineChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Pie, Cell, PieChart } from "recharts";
-import { salesData, newCustomersData, sampleOrders, products, attributes, categories } from "@/lib/data";
+import { salesData, newCustomersData, sampleOrders, products as allProducts, attributes as allAttributes, categories as allCategories } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Link from "next/link";
+import React from "react";
+import type { Product } from "@/lib/types";
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF'];
 
 export default function AdminDashboardPage() {
 
     const totalSales = salesData.reduce((acc, item) => acc + item.sales, 0);
-    const totalProducts = products.length;
+    const totalProducts = allProducts.length;
     const totalOrders = sampleOrders.length;
     const totalCustomers = newCustomersData.reduce((acc, item) => acc + item.newCustomers, 0);
-    const totalCategories = categories.length;
-    const totalAttributes = attributes.length;
+    const totalCategories = allCategories.length;
+    const totalAttributes = allAttributes.length;
+    
+    const recentProducts = allProducts.slice(-5).reverse();
 
-    const categoryDistribution = products.reduce((acc, product) => {
-        const categoryName = categories.find(c => c.slug === product.category)?.name || 'Uncategorized';
+    const categoryDistribution = allProducts.reduce((acc, product) => {
+        const categoryName = allCategories.find(c => c.slug === product.category)?.name || 'Uncategorized';
         acc[categoryName] = (acc[categoryName] || 0) + 1;
         return acc;
     }, {} as Record<string, number>);
 
     const pieData = Object.entries(categoryDistribution).map(([name, value]) => ({ name, value }));
+
+    const getCategoryName = (slug: string) => {
+        return allCategories.find(c => c.slug === slug)?.name || 'N/A';
+    }
 
 
   return (
@@ -52,7 +60,7 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">+{totalOrders}</div>
-            <p className="text-xs text-muted-foreground">+180.1% from last month</p>
+            <p className="text-xs text-muted-foreground">Sample data</p>
           </CardContent>
         </Card>
         <Card>
@@ -62,7 +70,7 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalProducts}</div>
-            <p className="text-xs text-muted-foreground">+19 from last month</p>
+            <p className="text-xs text-muted-foreground">Live count</p>
           </CardContent>
         </Card>
          <Card>
@@ -72,7 +80,7 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">+{totalCustomers}</div>
-            <p className="text-xs text-muted-foreground">+25 this month</p>
+            <p className="text-xs text-muted-foreground">Sample data</p>
           </CardContent>
         </Card>
          <Card>
@@ -82,7 +90,7 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalCategories}</div>
-            <p className="text-xs text-muted-foreground">Total categories</p>
+            <p className="text-xs text-muted-foreground">Live count</p>
           </CardContent>
         </Card>
          <Card>
@@ -92,7 +100,7 @@ export default function AdminDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalAttributes}</div>
-            <p className="text-xs text-muted-foreground">Total attribute types</p>
+            <p className="text-xs text-muted-foreground">Live count</p>
           </CardContent>
         </Card>
       </div>
@@ -101,7 +109,7 @@ export default function AdminDashboardPage() {
         <Card className="lg:col-span-4">
           <CardHeader>
             <CardTitle>Sales Overview</CardTitle>
-            <CardDescription>Monthly sales performance.</CardDescription>
+            <CardDescription>Monthly sales performance (Sample Data).</CardDescription>
           </CardHeader>
           <CardContent>
              <ChartContainer config={{}} className="h-[300px] w-full">
@@ -143,8 +151,39 @@ export default function AdminDashboardPage() {
 
        <Card>
             <CardHeader>
+                <CardTitle>Recent Products</CardTitle>
+                <CardDescription>The last 5 products added to your store.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Product Name</TableHead>
+                            <TableHead>Category</TableHead>
+                            <TableHead className="text-right">Price</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {recentProducts.map(product => (
+                            <TableRow key={product.id}>
+                                <TableCell>
+                                    <Link href={`/admin/products`} className="font-medium text-primary hover:underline">
+                                        {product.name}
+                                    </Link>
+                                </TableCell>
+                                <TableCell>{getCategoryName(product.category)}</TableCell>
+                                <TableCell className="text-right">${product.price.toFixed(2)}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </CardContent>
+        </Card>
+
+       <Card>
+            <CardHeader>
                 <CardTitle>Recent Orders</CardTitle>
-                <CardDescription>A list of the most recent orders.</CardDescription>
+                <CardDescription>A list of the most recent orders (Sample Data).</CardDescription>
             </CardHeader>
             <CardContent>
                 <Table>
@@ -183,3 +222,4 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
+
