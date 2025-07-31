@@ -13,7 +13,8 @@ import { Button } from '@/components/ui/button';
 import type { Product } from '@/lib/types';
 
 export default function CategoryPage({ params }: { params: { slug: string } }) {
-  const category = categories.find(c => c.slug === params.slug);
+  const { slug } = params;
+  const category = categories.find(c => c.slug === slug);
 
   if (!category) {
     notFound();
@@ -28,9 +29,9 @@ export default function CategoryPage({ params }: { params: { slug: string } }) {
       .filter(c => childCategoryIds.includes(c.id) || (c.parentId && childCategoryIds.includes(c.parentId)))
       .map(c => c.slug);
 
-    const relevantCategorySlugs = [params.slug, ...childCategorySlugs];
+    const relevantCategorySlugs = [slug, ...childCategorySlugs];
     return allProducts.filter(p => relevantCategorySlugs.includes(p.category));
-  }, [params.slug, category.id]);
+  }, [slug, category.id]);
 
   const [filteredProducts, setFilteredProducts] = React.useState<Product[]>(initialProducts);
   const [selectedBrands, setSelectedBrands] = React.useState<string[]>([]);
