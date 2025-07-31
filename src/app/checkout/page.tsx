@@ -13,14 +13,12 @@ import { useToast } from '@/hooks/use-toast';
 import { createOrder } from '@/app/actions';
 import type { OrderItem } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 export default function CheckoutPage() {
   const { cartItems, totalPrice, clearCart } = useCart();
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = React.useState(false);
-  const [paymentMethod, setPaymentMethod] = React.useState<'Credit Card' | 'Cash on Delivery'>('Credit Card');
 
   const handlePlaceOrder = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -44,7 +42,7 @@ export default function CheckoutPage() {
     try {
         const result = await createOrder({
             customer: {
-                name: `${formData.get('firstName')} ${formData.get('lastName')}`,
+                name: formData.get('name') as string,
                 email: formData.get('email') as string,
                 phone: formData.get('phone') as string,
                 address: formData.get('address') as string,
@@ -55,7 +53,7 @@ export default function CheckoutPage() {
             },
             items: orderItems,
             total: totalPrice,
-            paymentMethod: paymentMethod,
+            paymentMethod: 'Credit Card', // Defaulting for simplicity
         });
 
         if (result.success && result.orderId) {
@@ -64,7 +62,7 @@ export default function CheckoutPage() {
                 description: "Redirecting to confirmation page...",
             });
             clearCart();
-            router.push(`/order-confirmation/${result.orderId}`);
+            router.push(`/order/${result.orderId}`);
         } else {
             throw new Error(result.error || "Order creation failed unexpectedly.");
         }
@@ -94,134 +92,96 @@ export default function CheckoutPage() {
             </CardContent>
         </Card>
       ) : (
-      <div className="grid lg:grid-cols-2 gap-12">
-        <div>
-          <Card>
-            <CardHeader>
-              <CardTitle className="font-headline">Shipping & Payment</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handlePlaceOrder} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="firstName">First Name</Label>
-                    <Input id="firstName" name="firstName" placeholder="John" required />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="lastName">Last Name</Label>
-                    <Input id="lastName" name="lastName" placeholder="Doe" required />
-                  </div>
-                </div>
-                 <div className="grid grid-cols-2 gap-4">
-                     <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input id="email" type="email" name="email" placeholder="you@example.com" required />
+      <form onSubmit={handlePlaceOrder}>
+        <div className="grid lg:grid-cols-2 gap-12">
+            <div>
+            <Card>
+                <CardHeader>
+                <CardTitle className="font-headline">Shipping Information</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="name">Full Name</Label>
+                        <Input id="name" name="name" placeholder="Jane Doe" required />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="email">Email</Label>
+                            <Input id="email" type="email" name="email" placeholder="you@example.com" required />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="phone">Phone</Label>
+                            <Input id="phone" name="phone" placeholder="(123) 456-7890" required />
+                        </div>
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="phone">Phone</Label>
-                        <Input id="phone" name="phone" placeholder="(123) 456-7890" required />
+                    <Label htmlFor="address">Address</Label>
+                    <Input id="address" name="address" placeholder="123 Main St" required />
                     </div>
-                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="address">Address</Label>
-                  <Input id="address" name="address" placeholder="123 Main St" required />
-                </div>
-                 <div className="space-y-2">
-                  <Label htmlFor="city">City</Label>
-                  <Input id="city" name="city" placeholder="Anytown" required />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="state">State</Label>
-                    <Input id="state" name="state" placeholder="CA" required />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="zip">ZIP Code</Label>
-                    <Input id="zip" name="zip" placeholder="12345" required />
-                  </div>
-                </div>
-                 <div className="space-y-2">
-                    <Label htmlFor="country">Country</Label>
-                    <Input id="country" name="country" placeholder="USA" required />
-                </div>
-
-                <h3 className="text-xl font-headline pt-4">Payment Details</h3>
-                 <RadioGroup defaultValue="Credit Card" name="paymentMethod" onValueChange={(value: 'Credit Card' | 'Cash on Delivery') => setPaymentMethod(value)}>
-                    <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="Credit Card" id="r1" />
-                        <Label htmlFor="r1">Credit Card</Label>
+                    <div className="space-y-2">
+                    <Label htmlFor="city">City</Label>
+                    <Input id="city" name="city" placeholder="Anytown" required />
                     </div>
-                    <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="Cash on Delivery" id="r2" />
-                        <Label htmlFor="r2">Cash on Delivery</Label>
+                    <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="state">State</Label>
+                        <Input id="state" name="state" placeholder="CA" required />
                     </div>
-                </RadioGroup>
-
-                {paymentMethod === 'Credit Card' && (
-                    <div className="space-y-4 pt-4 border-t mt-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="card-number">Card Number</Label>
-                            <Input id="card-number" placeholder="**** **** **** 1234" required={paymentMethod === 'Credit Card'} />
+                    <div className="space-y-2">
+                        <Label htmlFor="zip">ZIP Code</Label>
+                        <Input id="zip" name="zip" placeholder="12345" required />
+                    </div>
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="country">Country</Label>
+                        <Input id="country" name="country" placeholder="USA" required />
+                    </div>
+                </CardContent>
+            </Card>
+            </div>
+            <div className="space-y-6">
+            <Card>
+                <CardHeader>
+                <CardTitle className="font-headline">Order Summary</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                {cartItems.map(item => (
+                    <div key={item.id} className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                        <div className="relative h-16 w-16 rounded-md overflow-hidden border">
+                        <Image src={item.imageUrl} alt={item.name} fill className="object-cover" />
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="expiry">Expiry Date</Label>
-                            <Input id="expiry" placeholder="MM/YY" required={paymentMethod === 'Credit Card'} />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="cvc">CVC</Label>
-                            <Input id="cvc" placeholder="123" required={paymentMethod === 'Credit Card'} />
-                        </div>
+                        <div>
+                        <p className="font-semibold">{item.name}</p>
+                        <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
                         </div>
                     </div>
-                )}
-                
-                <Button type="submit" size="lg" className="w-full mt-6 bg-accent hover:bg-accent/90" disabled={loading}>
-                  {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  {loading ? 'Placing Order...' : 'Place Order'}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+                    <p>${(item.price * item.quantity).toFixed(2)}</p>
+                    </div>
+                ))}
+                <div className="border-t pt-4 space-y-2">
+                    <div className="flex justify-between text-muted-foreground">
+                    <span>Subtotal</span>
+                    <span>${totalPrice.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-muted-foreground">
+                    <span>Shipping</span>
+                    <span>$0.00</span>
+                    </div>
+                    <div className="flex justify-between font-bold text-lg">
+                    <span>Total</span>
+                    <span>${totalPrice.toFixed(2)}</span>
+                    </div>
+                </div>
+                </CardContent>
+            </Card>
+            <Button type="submit" size="lg" className="w-full bg-accent hover:bg-accent/90" disabled={loading}>
+                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {loading ? 'Placing Order...' : 'Place Order'}
+            </Button>
+            </div>
         </div>
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="font-headline">Order Summary</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {cartItems.map(item => (
-                <div key={item.id} className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="relative h-16 w-16 rounded-md overflow-hidden border">
-                      <Image src={item.imageUrl} alt={item.name} fill className="object-cover" />
-                    </div>
-                    <div>
-                      <p className="font-semibold">{item.name}</p>
-                      <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
-                    </div>
-                  </div>
-                  <p>${(item.price * item.quantity).toFixed(2)}</p>
-                </div>
-              ))}
-              <div className="border-t pt-4 space-y-2">
-                 <div className="flex justify-between text-muted-foreground">
-                  <span>Subtotal</span>
-                  <span>${totalPrice.toFixed(2)}</span>
-                </div>
-                 <div className="flex justify-between text-muted-foreground">
-                  <span>Shipping</span>
-                  <span>$0.00</span>
-                </div>
-                 <div className="flex justify-between font-bold text-lg">
-                  <span>Total</span>
-                  <span>${totalPrice.toFixed(2)}</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+      </form>
       )}
     </div>
   );

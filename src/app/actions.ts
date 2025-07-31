@@ -48,7 +48,7 @@ export async function createOrder(orderData: {
             items: orderData.items,
             total: orderData.total,
             paymentMethod: orderData.paymentMethod,
-            status: 'Pending',
+            status: 'Processing',
             createdAt: timestamp
         };
         const docRef = await addDoc(collection(firestore, 'orders'), orderToCreate);
@@ -84,7 +84,7 @@ export async function getOrderById(orderId: string): Promise<Order | null> {
             customer: data.customer,
             total: data.total,
             items: data.items,
-            createdAt: data.createdAt, // keep original timestamp if needed
+            createdAt: data.createdAt,
             paymentMethod: data.paymentMethod || 'N/A',
         };
     } catch (error) {
