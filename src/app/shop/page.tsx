@@ -3,13 +3,14 @@
 
 import * as React from 'react';
 import { ProductCard } from '@/components/product-card';
-import { products as allProducts, categories } from '@/lib/data';
+import { products as allProducts, categories, attributes as allAttributes } from '@/lib/data';
 import { Filter, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import type { Product } from '@/lib/types';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 const PRODUCTS_PER_PAGE = 9;
 
@@ -17,6 +18,7 @@ export default function ShopPage() {
   const [filteredProducts, setFilteredProducts] = React.useState<Product[]>(allProducts);
   const [selectedCategories, setSelectedCategories] = React.useState<string[]>([]);
   const [selectedBrands, setSelectedBrands] = React.useState<string[]>([]);
+  const [selectedAttributes, setSelectedAttributes] = React.useState<Record<string, string[]>>({});
   const [priceRange, setPriceRange] = React.useState<[number, number]>([0, 300]);
   const [currentPage, setCurrentPage] = React.useState(1);
   
@@ -47,6 +49,22 @@ export default function ShopPage() {
       prev.includes(brand) ? prev.filter(b => b !== brand) : [...prev, brand]
     );
   };
+
+  const handleAttributeChange = (type: string, value: string) => {
+    setSelectedAttributes(prev => {
+        const currentValues = prev[type] || [];
+        const newValues = currentValues.includes(value)
+            ? currentValues.filter(v => v !== value)
+            : [...currentValues, value];
+        
+        if (newValues.length === 0) {
+            const { [type]: _, ...rest } = prev;
+            return rest;
+        }
+
+        return { ...prev, [type]: newValues };
+    });
+  };
   
   const handlePriceChange = (value: [number, number]) => {
     setPriceRange(value);
@@ -55,6 +73,7 @@ export default function ShopPage() {
   const clearFilters = () => {
     setSelectedCategories([]);
     setSelectedBrands([]);
+    setSelectedAttributes({});
     setPriceRange([0, 300]);
   }
 
@@ -69,11 +88,20 @@ export default function ShopPage() {
       filtered = filtered.filter(p => selectedBrands.includes(p.brand));
     }
 
+    if (Object.keys(selectedAttributes).length > 0) {
+        filtered = filtered.filter(p => {
+            return Object.entries(selectedAttributes).every(([type, values]) => {
+                const productAttributeValue = p.attributes[type];
+                return productAttributeValue && values.includes(productAttributeValue.toString());
+            });
+        });
+    }
+
     filtered = filtered.filter(p => p.price >= priceRange[0] && p.price <= priceRange[1]);
 
     setFilteredProducts(filtered);
     setCurrentPage(1); // Reset to first page on filter change
-  }, [selectedCategories, selectedBrands, priceRange]);
+  }, [selectedCategories, selectedBrands, priceRange, selectedAttributes]);
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -96,51 +124,81 @@ export default function ShopPage() {
               </Button>
             </div>
             
-            <div className="space-y-6">
-              <div>
-                <h3 className="font-semibold mb-3">Category</h3>
-                <div className="space-y-2">
-                  {categories.map(category => (
-                    <div key={category.id} className="flex items-center space-x-2">
-                      <Checkbox 
-                        id={`cat-${category.id}`} 
-                        checked={selectedCategories.includes(category.slug)}
-                        onCheckedChange={() => handleCategoryChange(category.slug)}
-                      />
-                      <Label htmlFor={`cat-${category.id}`} className="font-normal cursor-pointer">{category.name}</Label>
+            <Accordion type="multiple" defaultValue={['category', 'price', 'brand', ...allAttributes.map(a => a.type)]} className="w-full">
+              <AccordionItem value="category">
+                <AccordionTrigger className="font-semibold text-base py-3">Category</AccordionTrigger>
+                <AccordionContent>
+                  <div className="space-y-2 pt-2">
+                    {categories.map(category => (
+                      <div key={category.id} className="flex items-center space-x-2">
+                        <Checkbox 
+                          id={`cat-${category.id}`} 
+                          checked={selectedCategories.includes(category.slug)}
+                          onCheckedChange={() => handleCategoryChange(category.slug)}
+                        />
+                        <Label htmlFor={`cat-${category.id}`} className="font-normal cursor-pointer">{category.name}</Label>
+                      </div>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+
+               <AccordionItem value="price">
+                <AccordionTrigger className="font-semibold text-base py-3">Price Range</AccordionTrigger>
+                <AccordionContent>
+                  <div className="pt-2">
+                    <Slider
+                      value={priceRange}
+                      onValueChange={handlePriceChange}
+                      max={300}
+                      step={10}
+                    />
+                    <div className="flex justify-between text-sm text-muted-foreground mt-2">
+                      <span>${priceRange[0]}</span>
+                      <span>${priceRange[1]}</span>
                     </div>
-                  ))}
-                </div>
-              </div>
-               <div>
-                <h3 className="font-semibold mb-3">Price Range</h3>
-                <Slider
-                  value={priceRange}
-                  onValueChange={handlePriceChange}
-                  max={300}
-                  step={10}
-                />
-                <div className="flex justify-between text-sm text-muted-foreground mt-2">
-                  <span>${priceRange[0]}</span>
-                  <span>${priceRange[1]}</span>
-                </div>
-              </div>
-               <div>
-                <h3 className="font-semibold mb-3">Brand</h3>
-                <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
-                  {allBrands.map(brand => (
-                     <div key={brand} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`brand-${brand}`}
-                        checked={selectedBrands.includes(brand)}
-                        onCheckedChange={() => handleBrandChange(brand)}
-                      />
-                      <Label htmlFor={`brand-${brand}`} className="font-normal cursor-pointer">{brand}</Label>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="brand">
+                <AccordionTrigger className="font-semibold text-base py-3">Brand</AccordionTrigger>
+                <AccordionContent>
+                    <div className="space-y-2 pt-2 max-h-60 overflow-y-auto pr-2">
+                    {allBrands.map(brand => (
+                        <div key={brand} className="flex items-center space-x-2">
+                        <Checkbox
+                            id={`brand-${brand}`}
+                            checked={selectedBrands.includes(brand)}
+                            onCheckedChange={() => handleBrandChange(brand)}
+                        />
+                        <Label htmlFor={`brand-${brand}`} className="font-normal cursor-pointer">{brand}</Label>
+                        </div>
+                    ))}
                     </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+                </AccordionContent>
+              </AccordionItem>
+              
+              {allAttributes.map(attr => (
+                 <AccordionItem key={attr.id} value={attr.type}>
+                    <AccordionTrigger className="font-semibold text-base py-3">{attr.type}</AccordionTrigger>
+                    <AccordionContent>
+                        <div className="space-y-2 pt-2 max-h-60 overflow-y-auto pr-2">
+                            {attr.values.map(value => (
+                                <div key={value} className="flex items-center space-x-2">
+                                <Checkbox
+                                    id={`attr-${attr.type}-${value}`}
+                                    checked={selectedAttributes[attr.type]?.includes(value) || false}
+                                    onCheckedChange={() => handleAttributeChange(attr.type, value)}
+                                />
+                                <Label htmlFor={`attr-${attr.type}-${value}`} className="font-normal cursor-pointer">{value}</Label>
+                                </div>
+                            ))}
+                        </div>
+                    </AccordionContent>
+                 </AccordionItem>
+              ))}
+            </Accordion>
           </div>
         </aside>
 
