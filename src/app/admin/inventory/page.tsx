@@ -44,14 +44,17 @@ type DisplayPurchase = Omit<Purchase, 'date'> & { date: string; productName: str
 
 
 export default function InventoryPage() {
-  const [purchases, setPurchases] = React.useState<DisplayPurchase[]>(
-    samplePurchases.map(p => ({
-        ...p,
-        productName: products.find(prod => prod.id === p.productId)?.name || 'Unknown Product'
-    }))
-  );
+  const [purchases, setPurchases] = React.useState<DisplayPurchase[]>([]);
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const [editingPurchase, setEditingPurchase] = React.useState<DisplayPurchase | null>(null);
+
+  React.useEffect(() => {
+    const initialPurchases = samplePurchases.map(p => ({
+        ...p,
+        productName: products.find(prod => prod.id === p.productId)?.name || 'Unknown Product'
+    }));
+    setPurchases(initialPurchases);
+  }, []);
 
   const handleAddPurchase = () => {
     setEditingPurchase(null);
