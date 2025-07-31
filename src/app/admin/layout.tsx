@@ -8,6 +8,9 @@ import {
   Box,
   FileBarChart,
   Home,
+  Users,
+  Warehouse,
+  Tags,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -16,7 +19,11 @@ const adminNavItems = [
   { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/categories', label: 'Categories', icon: Box },
   { href: '/admin/products', label: 'Products', icon: Package },
+  { href: '/admin/attributes', label: 'Attributes', icon: Tags },
   { href: '/admin/orders', label: 'Orders', icon: ShoppingCart },
+  { href: '/admin/customers', label: 'Customers', icon: Users },
+  { href: '/admin/users', label: 'All Users', icon: Users },
+  { href: '/admin/inventory', label: 'Inventory', icon: Warehouse },
   { href: '/admin/reports', label: 'Reports', icon: FileBarChart },
 ];
 
