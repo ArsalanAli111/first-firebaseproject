@@ -2,22 +2,22 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingBag, User, Menu, LayoutDashboard, Edit, LogOut, UserCircle } from 'lucide-react';
+import { ShoppingBag, User, Menu, LayoutDashboard, Edit, LogOut, UserCircle, ChevronDown } from 'lucide-react';
 import { Button } from "./ui/button";
 import { useCart } from "@/hooks/use-cart";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent, DropdownMenuPortal } from "./ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useRouter } from "next/navigation";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogClose } from "./ui/dialog";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Logo } from "./logo";
+import { categories } from "@/lib/data";
 
 const navLinks = [
-    { href: "/shop", label: "Shop" },
     { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
 ];
@@ -35,10 +35,12 @@ export function Header() {
   }
   
   const handleProfileSave = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
     // In a real app, you would save this to the backend.
     setIsProfileDialogOpen(false);
   }
+
+  const mainCategories = categories.filter(c => ['perfumes-for-men', 'perfumes-for-women', 'unisex-perfumes', 'gift-sets', 'tester-perfumes', 'luxury-collection', 'best-sellers', 'new-arrivals'].includes(c.slug));
+
 
   return (
     <>
@@ -49,6 +51,25 @@ export function Header() {
               <Logo className="h-10 w-auto" />
             </Link>
             <nav className="hidden md:flex items-center gap-4 text-sm font-medium">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="flex items-center gap-1 transition-colors hover:text-accent px-0">
+                    Shop <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem asChild>
+                     <Link href="/shop">All Products</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  {mainCategories.map(category => (
+                     <DropdownMenuItem key={category.id} asChild>
+                       <Link href={`/category/${category.slug}`}>{category.name}</Link>
+                     </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
               {navLinks.map(link => (
                 <Link key={link.href} href={link.href} className="transition-colors hover:text-accent">
                   {link.label}
@@ -133,6 +154,9 @@ export function Header() {
                     <Logo className="h-10 w-auto" />
                   </Link>
                   <nav className="flex flex-col gap-4 text-lg">
+                    <Link href="/shop" className="transition-colors hover:text-accent" onClick={() => setMobileMenuOpen(false)}>
+                        Shop
+                    </Link>
                     {navLinks.map(link => (
                       <Link key={link.href} href={link.href} className="transition-colors hover:text-accent" onClick={() => setMobileMenuOpen(false)}>
                         {link.label}
