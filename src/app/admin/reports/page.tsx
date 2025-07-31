@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { LineChart, Line, BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from "recharts";
-import { newCustomersData, products, sampleOrders } from "@/lib/data";
+import { products, sampleOrders } from "@/lib/data";
 import { FileDown } from "lucide-react";
 import type { Product } from '@/lib/types';
 
@@ -42,6 +42,36 @@ export default function ReportsPage() {
         });
     }
     
+    return lastSixMonths;
+  }, []);
+
+  const newCustomersData = React.useMemo(() => {
+    const customerFirstOrder: Record<string, Date> = {};
+    sampleOrders.forEach(order => {
+      const orderDate = new Date(order.date);
+      if (!customerFirstOrder[order.customer.email] || orderDate < customerFirstOrder[order.customer.email]) {
+        customerFirstOrder[order.customer.email] = orderDate;
+      }
+    });
+
+    const newCustomersByMonth: Record<string, number> = {};
+    Object.values(customerFirstOrder).forEach(date => {
+      const month = date.toLocaleString('default', { month: 'short' });
+      newCustomersByMonth[month] = (newCustomersByMonth[month] || 0) + 1;
+    });
+
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const currentMonth = new Date().getMonth();
+    const lastSixMonths: { month: string; newCustomers: number }[] = [];
+
+    for (let i = 5; i >= 0; i--) {
+        const monthIndex = (currentMonth - i + 12) % 12;
+        const monthName = monthNames[monthIndex];
+        lastSixMonths.push({
+            month: monthName,
+            newCustomers: newCustomersByMonth[monthName] || 0,
+        });
+    }
     return lastSixMonths;
   }, []);
 
