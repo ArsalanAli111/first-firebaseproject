@@ -6,14 +6,15 @@ import { useCart } from '@/hooks/use-cart';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from '@/components/ui/card';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { createOrder } from '@/app/actions';
-import type { OrderItem } from '@/lib/types';
-import { Loader2 } from 'lucide-react';
+import type { OrderItem, Order } from '@/lib/types';
+import { Loader2, CheckCircle2 } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import Link from 'next/link';
 
 export default function CheckoutPage() {
   const { cartItems, totalPrice, clearCart } = useCart();
@@ -21,6 +22,7 @@ export default function CheckoutPage() {
   const { toast } = useToast();
   const [loading, setLoading] = React.useState(false);
   const [paymentMethod, setPaymentMethod] = React.useState<'Credit Card' | 'Cash on Delivery'>('Credit Card');
+  const [orderPlaced, setOrderPlaced] = React.useState<Order | null>(null);
 
 
   const handlePlaceOrder = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -47,6 +49,7 @@ export default function CheckoutPage() {
             customer: {
                 name: `${formData.get('firstName')} ${formData.get('lastName')}`,
                 email: formData.get('email') as string,
+                phone: formData.get('phone') as string,
                 address: formData.get('address') as string,
                 city: formData.get('city') as string,
                 state: formData.get('state') as string,
@@ -64,7 +67,16 @@ export default function CheckoutPage() {
                 description: "Thank you for your purchase. We've received your order.",
             });
             clearCart();
-            router.push(`/order-confirmation/${result.orderId}`);
+            // Instead of redirecting, we'll show the confirmation UI.
+            setOrderPlaced({
+                id: result.orderId,
+                customer: result.order.customer,
+                items: result.order.items,
+                total: result.order.total,
+                date: new Date(result.order.createdAt.seconds * 1000).toLocaleDateString(),
+                status: result.order.status,
+                paymentMethod: result.order.paymentMethod,
+            });
         } else {
             throw new Error(result.error || "Order creation failed unexpectedly.");
         }
@@ -79,6 +91,71 @@ export default function CheckoutPage() {
         setLoading(false);
     }
   };
+
+  if (orderPlaced) {
+    return (
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <Card className="max-w-2xl mx-auto">
+                <CardHeader className="text-center">
+                    <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-4" />
+                    <CardTitle className="text-3xl font-headline">Thank you for your order!</CardTitle>
+                    <CardDescription>
+                        Your order has been placed successfully. A confirmation email has been sent to {orderPlaced.customer.email}.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="my-4 p-4 border rounded-md">
+                        <h3 className="font-semibold text-lg mb-2">Order Summary</h3>
+                        <div className="flex justify-between text-muted-foreground">
+                            <span>Order ID:</span>
+                            <span className="font-mono text-sm">{orderPlaced.id}</span>
+                        </div>
+                        <div className="flex justify-between text-muted-foreground">
+                            <span>Order Date:</span>
+                            <span>{orderPlaced.date}</span>
+                        </div>
+                         <div className="flex justify-between text-muted-foreground">
+                            <span>Payment Method:</span>
+                            <span>{orderPlaced.paymentMethod}</span>
+                        </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                        {orderPlaced.items.map(item => (
+                            <div key={item.id} className="flex items-center justify-between">
+                                <div className="flex items-center gap-4">
+                                    <div className="relative h-16 w-16 rounded-md overflow-hidden border">
+                                        <Image src={item.imageUrl} alt={item.name} fill className="object-cover" />
+                                    </div>
+                                    <div>
+                                        <p className="font-semibold">{item.name}</p>
+                                        <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
+                                    </div>
+                                </div>
+                                <p>${(item.price * item.quantity).toFixed(2)}</p>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="border-t mt-4 pt-4 space-y-2">
+                        <div className="flex justify-between font-bold text-lg">
+                            <span>Total</span>
+                            <span>${orderPlaced.total.toFixed(2)}</span>
+                        </div>
+                    </div>
+                </CardContent>
+                <CardFooter className="flex flex-col gap-4">
+                    <Button asChild className="w-full">
+                        <Link href="/shop">Continue Shopping</Link>
+                    </Button>
+                    <Button variant="outline" asChild className="w-full">
+                        <Link href="/account">View Order History</Link>
+                    </Button>
+                </CardFooter>
+            </Card>
+        </div>
+    )
+  }
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -112,6 +189,16 @@ export default function CheckoutPage() {
                     <Input id="lastName" name="lastName" placeholder="Doe" required />
                   </div>
                 </div>
+                 <div className="grid grid-cols-2 gap-4">
+                     <div className="space-y-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input id="email" type="email" name="email" placeholder="you@example.com" required />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="phone">Phone</Label>
+                        <Input id="phone" name="phone" placeholder="(123) 456-7890" required />
+                    </div>
+                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="address">Address</Label>
                   <Input id="address" name="address" placeholder="123 Main St" required />
@@ -133,10 +220,6 @@ export default function CheckoutPage() {
                  <div className="space-y-2">
                     <Label htmlFor="country">Country</Label>
                     <Input id="country" name="country" placeholder="USA" required />
-                </div>
-                <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" name="email" placeholder="you@example.com" required />
                 </div>
 
                 <h3 className="text-xl font-headline pt-4">Payment Details</h3>

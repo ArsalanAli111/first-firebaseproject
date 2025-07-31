@@ -235,11 +235,24 @@ export default function OrdersPage() {
                 </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4 max-h-[60vh] overflow-y-auto pr-4">
-                <div className="text-sm">
-                    <span className="font-semibold">Payment Method:</span> {selectedOrder?.paymentMethod || 'N/A'}
+                <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                    <span className="font-semibold">Payment Method:</span> 
+                    <span>{selectedOrder?.paymentMethod || 'N/A'}</span>
+
+                    <span className="font-semibold">Customer Name:</span> 
+                    <span>{selectedOrder?.customer.name}</span>
+
+                    <span className="font-semibold">Email:</span> 
+                    <span>{selectedOrder?.customer.email}</span>
+                    
+                    <span className="font-semibold">Phone:</span> 
+                    <span>{selectedOrder?.customer.phone}</span>
+
+                    <span className="font-semibold">Shipping Address:</span> 
+                    <span className='col-span-2'>{selectedOrder?.customer.address}, {selectedOrder?.customer.city}, {selectedOrder?.customer.state} {selectedOrder?.customer.postalCode}, {selectedOrder?.customer.country}</span>
                 </div>
                {selectedOrder?.items.map(item => (
-                 <div key={item.id} className="flex items-start gap-4 py-2 border-b last:border-0">
+                 <div key={item.id} className="flex items-start gap-4 py-2 border-t pt-4 mt-2">
                     <Image src={item.imageUrl} alt={item.name} width={60} height={60} className="rounded-md" data-ai-hint="perfume bottle" />
                     <div className="flex-grow">
                         <p className="font-medium">{item.name}</p>

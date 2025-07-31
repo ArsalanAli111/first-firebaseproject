@@ -42,21 +42,31 @@ export async function createOrder(orderData: {
   paymentMethod: 'Credit Card' | 'Cash on Delivery';
 }) {
     try {
+        const timestamp = serverTimestamp();
         const orderToCreate = {
             customer: orderData.customer,
             items: orderData.items,
             total: orderData.total,
             paymentMethod: orderData.paymentMethod,
             status: 'Pending',
-            createdAt: serverTimestamp()
+            createdAt: timestamp
         };
         const docRef = await addDoc(collection(firestore, 'orders'), orderToCreate);
-        return { success: true, orderId: docRef.id };
-    } catch (error) {
+        
+        // To return the full order object for the confirmation page, we can construct it here.
+        // The serverTimestamp() will be resolved by Firestore, but for the client, we'll use a client-side date.
+        const createdOrderForClient = {
+            ...orderToCreate,
+            createdAt: {
+                seconds: Math.floor(Date.now() / 1000),
+                nanoseconds: 0
+            }
+        };
+
+        return { success: true, orderId: docRef.id, order: createdOrderForClient, error: null };
+    } catch (error: any) {
         console.error("Error creating order in Firestore:", error);
-        // It's better to throw the error so the client can catch a detailed message.
-        // The generic message is handled in the UI component.
-        throw new Error("Could not create order in database.");
+        return { success: false, error: "Could not create order in database.", orderId: null, order: null };
     }
 }
 

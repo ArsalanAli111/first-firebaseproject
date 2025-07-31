@@ -53,6 +53,7 @@ export type OrderStatus = 'Pending' | 'Shipped' | 'Delivered' | 'Cancelled';
 export type CustomerInfo = {
   name: string;
   email: string;
+  phone: string;
   address: string;
   city: string;
   state: string;
