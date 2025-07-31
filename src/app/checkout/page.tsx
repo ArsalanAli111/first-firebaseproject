@@ -40,7 +40,7 @@ export default function CheckoutPage() {
     }));
 
     try {
-        await createOrder({
+        const result = await createOrder({
             customer: {
                 name: `${formData.get('firstName')} ${formData.get('lastName')}`,
                 email: formData.get('email') as string,
@@ -54,7 +54,7 @@ export default function CheckoutPage() {
             description: "Thank you for your purchase. We've received your order.",
         });
         clearCart();
-        router.push('/account');
+        router.push(`/order-confirmation/${result.orderId}`);
     } catch (error) {
         console.error("Failed to create order:", error);
         toast({

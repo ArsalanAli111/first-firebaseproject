@@ -5,7 +5,7 @@ import { generateProductRecommendations } from '@/ai/flows/product-recommendatio
 import { products } from '@/lib/data';
 import type { Product, Order, OrderItem } from '@/lib/types';
 import { firestore } from '@/lib/firebase';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
 
 export async function getRecommendedProducts(viewingHistory: string[]): Promise<Product[]> {
   try {
@@ -47,5 +47,31 @@ export async function createOrder(orderData: Omit<Order, 'id' | 'date' | 'status
     } catch (error) {
         console.error("Error creating order in Firestore:", error);
         throw new Error("Could not create order.");
+    }
+}
+
+
+export async function getOrderById(orderId: string): Promise<Order | null> {
+    try {
+        const orderRef = doc(firestore, 'orders', orderId);
+        const orderSnap = await getDoc(orderRef);
+
+        if (!orderSnap.exists()) {
+            return null;
+        }
+
+        const data = orderSnap.data();
+        return {
+            id: orderSnap.id,
+            date: (data.createdAt as Timestamp)?.toDate().toLocaleDateString() || new Date(data.date).toLocaleDateString(),
+            status: data.status,
+            customer: data.customer,
+            total: data.total,
+            items: data.items,
+            createdAt: data.createdAt,
+        };
+    } catch (error) {
+        console.error("Error fetching order:", error);
+        throw new Error("Could not retrieve order.");
     }
 }
