@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { ArrowRight, ShoppingBag } from 'lucide-react';
 import { ProductCard } from "@/components/product-card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { NewsletterSignup } from "@/components/newsletter-signup";
 
 export default function Home() {
   
@@ -110,6 +111,9 @@ export default function Home() {
             ))}
           </div>
         </section>
+
+        <NewsletterSignup />
+
       </div>
     </div>
   );
