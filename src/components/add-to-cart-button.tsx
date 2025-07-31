@@ -25,9 +25,8 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
                 name: product.name,
                 price: product.price,
                 imageUrl: product.imageUrl,
+                quantity: quantity
             });
-            // if adding for first time, quantity needs to be set
-            updateQuantity(product.id, quantity);
         }
     };
     

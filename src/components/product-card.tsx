@@ -23,6 +23,7 @@ export function ProductCard({ product }: ProductCardProps) {
       name: product.name,
       price: product.price,
       imageUrl: product.imageUrl,
+      quantity: 1,
     });
   };
 
