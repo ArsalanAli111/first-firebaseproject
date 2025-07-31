@@ -9,7 +9,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/hooks/use-auth';
 
 export const metadata: Metadata = {
-  title: 'Scent Sample',
+  title: 'Oud Mystique',
   description: 'Discover your next signature scent.',
 };
 

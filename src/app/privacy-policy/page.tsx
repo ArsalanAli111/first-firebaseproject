@@ -9,7 +9,7 @@ export default function PrivacyPolicyPage() {
           <CardTitle className="text-4xl font-bold font-headline text-center">Privacy Policy</CardTitle>
         </CardHeader>
         <CardContent className="prose prose-lg max-w-none text-muted-foreground prose-headings:font-headline prose-headings:text-foreground">
-            <p>Your privacy is important to us. It is Scent Sample's policy to respect your privacy regarding any information we may collect from you across our website.</p>
+            <p>Your privacy is important to us. It is Oud Mystique's policy to respect your privacy regarding any information we may collect from you across our website.</p>
 
             <h3>1. Information we collect</h3>
             <p>Log data: When you visit our website, our servers may automatically log the standard data provided by your web browser. It may include your computer’s Internet Protocol (IP) address, your browser type and version, the pages you visit, the time and date of your visit, the time spent on each page, and other details.</p>

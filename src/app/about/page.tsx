@@ -16,7 +16,7 @@ export default function AboutPage() {
         />
         <div className="relative z-10 bg-black bg-opacity-30 p-8 rounded-lg">
           <h1 className="text-4xl md:text-6xl font-bold font-headline mb-4 tracking-tight">
-            About Scent Sample
+            About Oud Mystique
           </h1>
           <p className="text-lg md:text-xl max-w-3xl mx-auto font-body">
             Your personal journey into the world of exquisite fragrances starts here.
@@ -32,7 +32,7 @@ export default function AboutPage() {
             </CardHeader>
             <CardContent className="text-lg text-muted-foreground text-center space-y-4">
               <p>
-                Scent Sample was born from a passion for the art of perfumery. We believe that a fragrance is more than just a scent; it's an expression of identity, a memory, and a personal signature. 
+                Oud Mystique was born from a passion for the art of perfumery. We believe that a fragrance is more than just a scent; it's an expression of identity, a memory, and a personal signature. 
               </p>
               <p>
                 Our mission is to make the world of luxury and niche fragrances accessible to everyone. We offer a curated collection of authentic scents, allowing you to explore, discover, and fall in love with new perfumes without committing to a full bottle.

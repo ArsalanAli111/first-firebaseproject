@@ -5,7 +5,7 @@ export function Logo({ className }: { className?: string }) {
       className={className}
       viewBox="0 0 180 40"
       xmlns="http://www.w3.org/2000/svg"
-      aria-label="Scent Sample"
+      aria-label="Oud Mystique"
     >
       <text
         x="0"
@@ -15,17 +15,17 @@ export function Logo({ className }: { className?: string }) {
         fontWeight="bold"
         fill="hsl(var(--primary))"
       >
-        Scent
+        Oud
       </text>
       <text
-        x="85"
+        x="65"
         y="30"
         fontFamily="Playfair Display, serif"
         fontStyle="italic"
         fontSize="28"
         fill="hsl(var(--accent))"
       >
-        Sample
+        Mystique
       </text>
     </svg>
   );
