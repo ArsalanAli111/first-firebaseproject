@@ -12,8 +12,7 @@ import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import type { Product } from '@/lib/types';
 
-export default function CategoryPage({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+export default function CategoryPage({ params: { slug } }: { params: { slug: string } }) {
   const category = categories.find(c => c.slug === slug);
 
   if (!category) {
