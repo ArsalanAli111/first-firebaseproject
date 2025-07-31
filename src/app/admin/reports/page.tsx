@@ -46,13 +46,31 @@ export default function ReportsPage() {
   }, []);
 
   React.useEffect(() => {
-    // Calculate top selling products from sample data on the client side
-    const generatedProducts = products.slice(0, 5).map(p => ({
-      ...p,
-      unitsSold: Math.floor(Math.random() * 100) + 20,
-      revenue: p.price * (Math.floor(Math.random() * 100) + 20)
-    })).sort((a,b) => b.revenue - a.revenue);
-    setTopSellingProducts(generatedProducts);
+    const productSales: Record<string, { unitsSold: number; revenue: number }> = {};
+
+    sampleOrders.forEach(order => {
+        order.items.forEach(item => {
+            if (!productSales[item.id]) {
+                productSales[item.id] = { unitsSold: 0, revenue: 0 };
+            }
+            productSales[item.id].unitsSold += item.quantity;
+            productSales[item.id].revenue += item.price * item.quantity;
+        });
+    });
+
+    const sortedProducts = Object.entries(productSales)
+        .map(([productId, salesData]) => {
+            const productInfo = products.find(p => p.id === productId);
+            return {
+                ...productInfo,
+                ...salesData
+            } as TopSellingProduct;
+        })
+        .filter(p => p.id)
+        .sort((a, b) => b.revenue - a.revenue)
+        .slice(0, 5);
+        
+    setTopSellingProducts(sortedProducts);
   }, []);
 
   return (
