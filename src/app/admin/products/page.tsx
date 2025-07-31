@@ -6,6 +6,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -37,7 +38,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { MoreHorizontal, PlusCircle, File } from 'lucide-react';
+import { MoreHorizontal, PlusCircle, File, ChevronLeft, ChevronRight } from 'lucide-react';
 import { products as initialProducts, categories, attributes as allAttributes } from '@/lib/data';
 import type { Product } from '@/lib/types';
 import Image from 'next/image';
@@ -45,10 +46,24 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 
+const PRODUCTS_PER_PAGE = 20;
+
 export default function ProductsPage() {
   const [products, setProducts] = React.useState<Product[]>(initialProducts);
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const [editingProduct, setEditingProduct] = React.useState<Product | null>(null);
+  const [currentPage, setCurrentPage] = React.useState(1);
+
+  const totalPages = Math.ceil(products.length / PRODUCTS_PER_PAGE);
+  const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
+  const endIndex = startIndex + PRODUCTS_PER_PAGE;
+  const currentProducts = products.slice(startIndex, endIndex);
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
   
   const handleAddProduct = () => {
     setEditingProduct(null);
@@ -144,7 +159,7 @@ export default function ProductsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {products.map(product => (
+              {currentProducts.map(product => (
                 <TableRow key={product.id}>
                   <TableCell className="hidden sm:table-cell">
                     <Image
@@ -184,6 +199,39 @@ export default function ProductsPage() {
             </TableBody>
           </Table>
         </CardContent>
+         <CardFooter className="flex justify-between items-center pt-4">
+            <div className="text-xs text-muted-foreground">
+                Showing <strong>{startIndex + 1}-{Math.min(endIndex, products.length)}</strong> of <strong>{products.length}</strong> products
+            </div>
+            <div className="flex items-center gap-2">
+                <Button 
+                    variant="outline" 
+                    size="icon" 
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                >
+                    <ChevronLeft className="h-4 w-4" />
+                </Button>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                    <Button 
+                        key={page}
+                        variant={currentPage === page ? 'default' : 'outline'} 
+                        size="icon"
+                        onClick={() => handlePageChange(page)}
+                    >
+                        {page}
+                    </Button>
+                ))}
+                 <Button 
+                    variant="outline" 
+                    size="icon" 
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                >
+                    <ChevronRight className="h-4 w-4" />
+                </Button>
+            </div>
+        </CardFooter>
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
