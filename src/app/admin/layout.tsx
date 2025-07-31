@@ -5,11 +5,7 @@ import {
   LayoutDashboard,
   ShoppingCart,
   Package,
-  Users,
   Box,
-  Tags,
-  Warehouse,
-  UserCog,
   FileBarChart,
   Home,
 } from 'lucide-react';
@@ -18,13 +14,9 @@ import { usePathname } from 'next/navigation';
 
 const adminNavItems = [
   { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/admin/orders', label: 'Customer Orders', icon: ShoppingCart },
-  { href: '/admin/products', label: 'Products', icon: Package },
   { href: '/admin/categories', label: 'Categories', icon: Box },
-  { href: '/admin/attributes', label: 'Attributes', icon: Tags },
-  { href: '/admin/inventory', label: 'Inventory', icon: Warehouse },
-  { href: '/admin/users', label: 'User Management', icon: UserCog },
-  { href: '/admin/customers', label: 'Customers', icon: Users },
+  { href: '/admin/products', label: 'Products', icon: Package },
+  { href: '/admin/orders', label: 'Orders', icon: ShoppingCart },
   { href: '/admin/reports', label: 'Reports', icon: FileBarChart },
 ];
 
@@ -45,7 +37,7 @@ export default function AdminLayout({
                         <Link
                             key={item.href}
                             href={item.href}
-                            className={`flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${pathname === item.href ? 'bg-muted text-primary' : ''}`}
+                            className={`flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary ${pathname.startsWith(item.href) ? 'bg-muted text-primary' : ''}`}
                         >
                             <item.icon className="h-4 w-4" />
                             {item.label}

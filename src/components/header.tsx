@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingBag, User, Menu, LayoutDashboard, Settings, LogOut, UserCircle, Edit } from 'lucide-react';
+import { ShoppingBag, User, Menu, LayoutDashboard, Edit, LogOut, UserCircle } from 'lucide-react';
 import { Button } from "./ui/button";
 import { useCart } from "@/hooks/use-cart";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
@@ -15,13 +15,12 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Logo } from "./logo";
+import { categories } from "@/lib/data";
 
-const navLinks = [
-  { href: "/shop", label: "Shop" },
-  { href: "/category/perfumes-for-men", label: "Men" },
-  { href: "/category/perfumes-for-women", label: "Women" },
-  { href: "/category/best-sellers", label: "Best Sellers" },
-];
+const navLinks = categories.map(c => ({
+    href: `/category/${c.slug}`,
+    label: c.name
+}));
 
 export function Header() {
   const { cartCount } = useCart();
@@ -49,7 +48,7 @@ export function Header() {
             <Link href="/" className="text-2xl font-bold font-headline text-primary">
               <Logo className="h-10 w-auto" />
             </Link>
-            <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
+            <nav className="hidden md:flex items-center gap-4 text-sm font-medium">
               {navLinks.map(link => (
                 <Link key={link.href} href={link.href} className="transition-colors hover:text-accent">
                   {link.label}

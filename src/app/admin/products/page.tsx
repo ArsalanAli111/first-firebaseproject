@@ -33,7 +33,6 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
     DialogClose,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
@@ -43,6 +42,7 @@ import { MoreHorizontal, PlusCircle, File } from 'lucide-react';
 import { products as initialProducts, categories } from '@/lib/data';
 import type { Product } from '@/lib/types';
 import Image from 'next/image';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export default function ProductsPage() {
   const [products, setProducts] = React.useState<Product[]>(initialProducts);
@@ -66,30 +66,22 @@ export default function ProductsPage() {
   const handleSaveProduct = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const formData = new FormData(e.currentTarget);
-      const attributesString = formData.get('attributes') as string;
-      let attributes = {};
-      try {
-        if (attributesString) {
-            attributes = JSON.parse(attributesString);
-        }
-      } catch (error) {
-          console.error("Invalid JSON for attributes", error);
-          // handle error, maybe show a toast to the user
-      }
-
-
+      const name = formData.get('name') as string;
+      const slug = name.toLowerCase().replace(/\s+/g, '-');
+      
       const newProduct: Product = {
           id: editingProduct ? editingProduct.id : `p${products.length + 1}`,
-          name: formData.get('name') as string,
+          name: name,
           description: formData.get('description') as string,
           price: parseFloat(formData.get('price') as string),
           category: formData.get('category') as string,
           stock: parseInt(formData.get('stock') as string),
-          imageUrl: editingProduct?.imageUrl || 'https://placehold.co/600x600.png',
-          images: editingProduct?.images || ['https://placehold.co/600x600.png'],
-          slug: (formData.get('name') as string).toLowerCase().replace(/\s+/g, '-'),
+          imageUrl: editingProduct?.imageUrl || `https://placehold.co/600x600.png?text=${encodeURIComponent(name)}`,
+          images: editingProduct?.images || [`https://placehold.co/600x600.png?text=${encodeURIComponent(name)}`],
+          slug: slug,
+          brand: formData.get('brand') as string,
           reviews: editingProduct?.reviews || [],
-          attributes: attributes,
+          attributes: {}, // Simplified for now
       };
 
       if (editingProduct) {
@@ -134,7 +126,6 @@ export default function ProductsPage() {
                 </TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Category</TableHead>
-                <TableHead className="hidden md:table-cell">Attributes</TableHead>
                 <TableHead>Price</TableHead>
                 <TableHead className="hidden md:table-cell">Quantity</TableHead>
                 <TableHead>
@@ -156,13 +147,6 @@ export default function ProductsPage() {
                   </TableCell>
                   <TableCell className="font-medium">{product.name}</TableCell>
                    <TableCell>{getCategoryName(product.category)}</TableCell>
-                   <TableCell className="hidden md:table-cell">
-                        <div className="flex flex-wrap gap-1">
-                            {product.attributes && Object.entries(product.attributes).map(([key, value]) => (
-                                <Badge key={key} variant="secondary">{`${key}: ${value}`}</Badge>
-                            ))}
-                        </div>
-                   </TableCell>
                   <TableCell>${product.price.toFixed(2)}</TableCell>
                   <TableCell className="hidden md:table-cell">{product.stock}</TableCell>
                   <TableCell>
@@ -200,7 +184,7 @@ export default function ProductsPage() {
                            {editingProduct ? 'Update the details of this product.' : 'Fill out the form to add a new product.'}
                         </DialogDescription>
                     </DialogHeader>
-                    <div className="grid gap-4 py-4">
+                    <div className="grid gap-4 py-4 max-h-[70vh] overflow-y-auto pr-6">
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="name" className="text-right">Name</Label>
                             <Input id="name" name="name" defaultValue={editingProduct?.name} className="col-span-3" required />
@@ -215,17 +199,25 @@ export default function ProductsPage() {
                         </div>
                          <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="category" className="text-right">Category</Label>
-                            <Input id="category" name="category" defaultValue={editingProduct?.category} className="col-span-3" required />
+                            <Select name="category" defaultValue={editingProduct?.category}>
+                                <SelectTrigger className="col-span-3">
+                                    <SelectValue placeholder="Select a category" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {categories.map(cat => (
+                                        <SelectItem key={cat.id} value={cat.slug}>{cat.name}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </div>
                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="attributes" className="text-right">Attributes</Label>
-                            <Textarea id="attributes" name="attributes" defaultValue={JSON.stringify(editingProduct?.attributes || {})} className="col-span-3" placeholder='e.g. {"size": "50ml"}' />
+                            <Label htmlFor="brand" className="text-right">Brand</Label>
+                            <Input id="brand" name="brand" defaultValue={editingProduct?.brand} className="col-span-3" required />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="stock" className="text-right">Quantity</Label>
                             <Input id="stock" name="stock" type="number" defaultValue={editingProduct?.stock} className="col-span-3" required />
                         </div>
-                         {/* We will add image upload in a future step */}
                     </div>
                     <DialogFooter>
                         <DialogClose asChild>

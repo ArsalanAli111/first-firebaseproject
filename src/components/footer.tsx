@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Facebook, Instagram, Twitter } from 'lucide-react';
 import { Button } from './ui/button';
 import { Logo } from "./logo";
+import { categories } from "@/lib/data";
 
 const staticLinks = [
   { href: "/shipping-policy", label: "Shipping Policy" },
@@ -24,10 +25,13 @@ export function Footer() {
           <div className="md:col-span-1">
             <h4 className="font-semibold font-headline">Shop</h4>
             <ul className="mt-4 space-y-2 text-sm">
-              <li><Link href="/category/perfumes-for-men" className="hover:text-accent transition-colors">Men's</Link></li>
-              <li><Link href="/category/perfumes-for-women" className="hover:text-accent transition-colors">Women's</Link></li>
-              <li><Link href="/category/best-sellers" className="hover:text-accent transition-colors">Best Sellers</Link></li>
-              <li><Link href="/category/gift-box" className="hover:text-accent transition-colors">Gift Sets</Link></li>
+              {categories.slice(0, 4).map(category => (
+                <li key={category.id}>
+                  <Link href={`/category/${category.slug}`} className="hover:text-accent transition-colors">
+                    {category.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
           <div className="md:col-span-1">
