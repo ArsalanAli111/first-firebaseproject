@@ -39,6 +39,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { samplePurchases, products } from '@/lib/data';
 import type { Purchase } from '@/lib/firestore-types';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 type DisplayPurchase = Omit<Purchase, 'date'> & { date: string; productName: string };
 
@@ -61,6 +62,15 @@ export default function InventoryPage() {
     setIsDialogOpen(true);
   };
   
+  const handleEditPurchase = (purchase: DisplayPurchase) => {
+    setEditingPurchase(purchase);
+    setIsDialogOpen(true);
+  };
+
+  const handleDeletePurchase = (purchaseId: string) => {
+    setPurchases(currentPurchases => currentPurchases.filter(p => p.id !== purchaseId));
+  };
+  
   const handleSavePurchase = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const formData = new FormData(e.currentTarget);
@@ -77,13 +87,13 @@ export default function InventoryPage() {
           quantity: quantity,
           unitCost: unitCost,
           totalCost: totalCost,
-          date: new Date().toISOString().split('T')[0], // Use today's date
+          date: editingPurchase?.date || new Date().toISOString().split('T')[0], // Use today's date for new, keep original for edits
       };
 
       if (editingPurchase) {
           setPurchases(purchases.map(p => p.id === newPurchase.id ? newPurchase : p));
       } else {
-          setPurchases([...purchases, newPurchase]);
+          setPurchases([newPurchase, ...purchases]);
       }
       setIsDialogOpen(false);
   }
@@ -141,8 +151,8 @@ export default function InventoryPage() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem disabled>Edit</DropdownMenuItem>
-                        <DropdownMenuItem disabled>Delete</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleEditPurchase(purchase)}>Edit</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleDeletePurchase(purchase.id)} className="text-destructive">Delete</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
@@ -165,8 +175,16 @@ export default function InventoryPage() {
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="productId" className="text-right">Product</Label>
-                            {/* In a real app, this would be a select dropdown */}
-                            <Input id="productId" name="productId" defaultValue={editingPurchase?.productId || 'p1'} className="col-span-3" required />
+                             <Select name="productId" defaultValue={editingPurchase?.productId}>
+                                <SelectTrigger className="col-span-3">
+                                    <SelectValue placeholder="Select a product" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {products.map(product => (
+                                        <SelectItem key={product.id} value={product.id}>{product.name}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="supplier" className="text-right">Supplier</Label>
